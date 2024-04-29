@@ -161,9 +161,9 @@ function SortFnMenu_(lhs, rhs)
 		return 1
 	else
 		local lhs_mod = vim.fn.matchstr(lhs["lhs"], '^<\\zs\\([MCS-]\\)*\\ze')
-		local lhs_priority = vim.fn.index(config.mod_order, lhs_mod)
+		local lhs_priority = vim.fn.index(config.mod_order or {}, lhs_mod)
 		local rhs_mod = vim.fn.matchstr(rhs["lhs"], '^<\\zs\\([MCS-]\\)*\\ze')
-		local rhs_priority = vim.fn.index(config.mod_order, rhs_mod)
+		local rhs_priority = vim.fn.index(config.mod_order or {}, rhs_mod)
 		if lhs_priority < rhs_priority then
 			return -1
 		elseif lhs_priority > rhs_priority then
