@@ -34,6 +34,7 @@ M.open = function(help_screen)
 		help_window.winid = vim.api.nvim_open_win(help_window.bid, 0, opts)
 		help_window.open = true
 		vim.api.nvim_buf_set_lines(help_window.bid, 0, -1, true, help_screen)
+		vim.api.nvim_win_set_option(help_window.winid, 'winhl', 'Normal:Normal,CursorColumn:Normal,CursorLine:Normal')
 		vim.cmd [[redraw]]
 	end
 end
