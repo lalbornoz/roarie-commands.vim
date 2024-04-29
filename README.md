@@ -19,8 +19,36 @@ When using Vim, no further specific setup is required. When using Neovim:
 --
 -- If telescope.nvim is present, ensure this executes after
 -- telescope.nvim has been loaded and setup successfully.
+-- The following reflects the builtin default configuration.
 --
-require("roarie-commands").setup({})
+require("roarie-commands").setup({
+	help_screen = {
+		"<{Esc,C-C}>                                  Exit menu mode",
+		"<{S-[a-z0-9],Down,Space}>, <{Left,Right}>    Open/select menu",
+		"[a-z0-9], <{Page,}Down,Up,Home,End>          Select menu items",
+		"<{Space,Enter}>                              Activate menu item",
+	},
+	help_text = "Press ? for help",
+
+	highlights = {
+		QuickBG = {ctermfg=251, ctermbg=236, fg="#c6c6c6", bg="#303030"},
+		QuickBorder = {ctermfg=251, ctermbg=236, fg="#0679a5", bg="#303030"},
+		QuickSel = {ctermfg=236, ctermbg=251, fg="#303030", bg="#f5a9b8"},
+		QuickSelMap = {ctermfg=236, ctermbg=251, underline=true, fg="#0679a5", bg="#f5a9b8"},
+		QuickKey = {ctermfg=179, underline=true, fg="#87d7d7"},
+	},
+
+	mod_order = {
+		'',
+		'S-',
+		'C-',
+		'C-S-',
+		'M-',
+		'M-S-',
+		'M-C-',
+		'M-C-S-',
+	},
+})
 ```
 
 # Usage
