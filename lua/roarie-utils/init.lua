@@ -134,6 +134,24 @@ M.to_title = function(str)
 end
 -- }}}
 
+-- {{{ M.highlight_border = function(hl_group, items, w, h, winid)
+M.highlight_border = function(hl_group, items, w, h, winid)
+	local cmdlist = {}
+	table.insert(cmdlist, M.highlight_region(hl_group, 1, 1, 1, w + 1, true))
+	for y=2,(h-1) do
+		table.insert(cmdlist, M.highlight_region(hl_group, y, 1, y, 2, true))
+		table.insert(cmdlist, M.highlight_region(hl_group, y, w, y, w + 1, true))
+	end
+	table.insert(cmdlist, M.highlight_region(hl_group, h, 1, h, w + 1, true))
+	for item_idx, item in ipairs(items) do
+		if item["display"] == "--" then
+			table.insert(cmdlist, M.highlight_region(hl_group, item_idx + 1, 1, item_idx + 1, w + 1, true))
+		end
+	end
+	M.win_execute(winid, cmdlist, false)
+	vim.api.nvim_win_set_option(winid, 'cursorline', false)
+end
+-- }}}
 -- {{{ M.highlight_region = function(name, srow, scol, erow, ecol, virtual)
 M.highlight_region = function(name, srow, scol, erow, ecol, virtual)
 	local sep = ''

@@ -71,24 +71,6 @@ function get_keys(keys, cmdlist, menus, textlist, w)
 	end
 end
 -- }}}
--- {{{ function highlight_border(menu_popup, menus)
-function highlight_border(menu_popup, menus)
-	local cmdlist = {}
-	table.insert(cmdlist, utils.highlight_region('QuickBorder', 1, 1, 1, menu_popup.w + 1, true))
-	for y=2,(menu_popup.h-1) do
-		table.insert(cmdlist, utils.highlight_region('QuickBorder', y, 1, y, 2, true))
-		table.insert(cmdlist, utils.highlight_region('QuickBorder', y, menu_popup.w, y, menu_popup.w + 1, true))
-	end
-	table.insert(cmdlist, utils.highlight_region('QuickBorder', menu_popup.h, 1, menu_popup.h, menu_popup.w + 1, true))
-	for item_idx, item in ipairs(menus.items[menus.idx].items) do
-		if item["display"] == "--" then
-			table.insert(cmdlist, utils.highlight_region('QuickBorder', item_idx + 1, 1, item_idx + 1, menu_popup.w + 1, true))
-		end
-	end
-	utils.win_execute(menu_popup.winid, cmdlist, false)
-	vim.api.nvim_win_set_option(menu_popup.winid, 'cursorline', false)
-end
--- }}}
 -- {{{ function select_item(idx_new, menu_popup, menus)
 function select_item(idx_new, menu_popup, menus)
 	if idx_new ~= menu_popup.idx then
@@ -119,7 +101,7 @@ function select_item(idx_new, menu_popup, menus)
 
 		end
 		utils.win_execute(menu_popup.winid, cmdlist, false)
-		highlight_border(menu_popup, menus)
+		utils.highlight_border("QuickBorder", menus.items[menus.idx].items, menu_popup.w, menu_popup.h, menu_popup.winid)
 	end
 end
 -- }}}
@@ -190,8 +172,7 @@ M.open = function(menus, menu_popup, key_char)
 	vim.api.nvim_win_set_option(menu_popup.winid, 'winhl', 'Normal:QuickBG,CursorColumn:QuickBG,CursorLine:QuickBorder')
 	vim.api.nvim_win_set_option(menu_popup.winid, 'cursorline', false)
 	M.select_item_idx(1, menu_popup, menus)
-
-	highlight_border(menu_popup, menus)
+	utils.highlight_border("QuickBorder", menus.items[menus.idx].items, menu_popup.w, menu_popup.h, menu_popup.winid)
 
 	return menu_popup
 end

@@ -49,6 +49,18 @@ end
 -- {{{ M.frame = function(str, w, h, chars)
 M.frame = function(str, w, h, chars)
 	local str_ = {}
+
+	if w == -1 then
+		w = 0
+		for _, line in ipairs(str) do
+			w = math.max(w, line:len())
+		end
+		w = w + 2
+	end
+	if h == -1 then
+		h = table.getn(str)
+	end
+
 	if chars == nil then
 		chars = border_chars_default
 	end
