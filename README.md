@@ -6,6 +6,11 @@ an optional [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 command palette picker. Both Neovim as well as Vim, with [vim-quickui](https://github.com/skywind3000/vim-quickui)
 as dependency, are supported.
 
+# Demo
+
+![Menu UI](https://github.com/lalbornoz/roarie-commands.vim/blob/master/Screenshot1.png?raw=true)
+![Telescope command palette picker](https://github.com/lalbornoz/roarie-commands.vim/blob/master/Screenshot2.png?raw=true)
+
 # Installation
 
 When using Vim, no further specific setup is required. When using Neovim:
@@ -55,5 +60,7 @@ call roarie_commands#Install()
 " Map this in order to activate the menu bar.
 call roarie_commands#OpenMenu()
 ```
+
+Please refer to `autoload/roarie_commands.vim` for the full API.
 
 [modeline]: # ( vim: set tw=0: )
