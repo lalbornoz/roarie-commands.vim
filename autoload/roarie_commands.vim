@@ -47,11 +47,12 @@ fun! roarie_commands#AddVMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 endfun
 " }}}
 
-" {{{ fun! roarie_commands#AddMenu(title, priority, ...)
-fun! roarie_commands#AddMenu(title, priority, ...)
+" {{{ fun! roarie_commands#AddMenu(title, ...)
+fun! roarie_commands#AddMenu(title, ...)
+	let l:priority = get(a:, 1, str2nr(substitute(expand('<sfile>:t'), '\..*$', '', '')))
 	call luaeval(
 		\ 'require("roarie-menu").AddMenu(_A[1], _A[2], _A[3])',
-		\ [a:title, a:priority, get(a:, 1, 0)])
+		\ [a:title, l:priority, get(a:, 2, 0)])
 endfun
 " }}}
 " {{{ fun! roarie_commands#AddSeparator(menu)
@@ -288,12 +289,13 @@ fun! roarie_commands#AddVMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 endfun
 " }}}
 
-" {{{ fun! roarie_commands#AddMenu(title, priority, ...)
-fun! roarie_commands#AddMenu(title, priority, ...)
+" {{{ fun! roarie_commands#AddMenu(title, ...)
+fun! roarie_commands#AddMenu(title, ...)
+	let l:priority = get(a:, 1, str2nr(substitute(expand('<sfile>:t'), '\..*$', '', '')))
 	let g:roarie_menus[a:title] = {}
 	let g:roarie_menus[a:title]['items'] = []
-	let g:roarie_menus[a:title]['priority'] = a:priority
-	let ignore_in_palette = get(a:, 1, 0)
+	let g:roarie_menus[a:title]['priority'] = l:priority
+	let ignore_in_palette = get(a:, 2, 0)
 	if ignore_in_palette == 1
 		let g:roarie_menus[a:title]['ignore_in_palette'] = 1
 	else
