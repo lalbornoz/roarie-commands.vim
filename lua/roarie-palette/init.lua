@@ -37,7 +37,7 @@ function get_menu_keys()
             lhs = item["lhs"],
             menu = menu:gsub("&", ""),
             mode = item["mode"],
-            ordinal = item["title"]:gsub("&", "") .. " " .. item["id"],
+            ordinal = item["lhs"] .. item["title"]:gsub("&", "") .. " " .. item["id"],
             rhs = item["rhs"],
             value = nil,
           }
