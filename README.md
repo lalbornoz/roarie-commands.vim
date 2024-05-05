@@ -57,13 +57,24 @@ require("roarie-commands").setup({
 
 ```vim
 "
-" Adds a menu titled "File" with accelerator "F" and priority 200,
-" a pseudo-mapping (purely descriptive, no mapping is executed,)
-" a regular mapping, and a regular mapping with a function keys
-" menu item; see below wrt. this and why priority starts at 200
-" as opposed to 100.
+" Adds a menu titled "File" with accelerator "F" and priority 200.
+" see below wrt. this and why priority starts at 200 as opposed to
+" 100.
 "
 call roarie_commands#AddMenu("&File", 200)
+
+"
+" Alternatively, if the name of the file containing these calls has
+" the format <priority>.<name>.vim - e.g.: 200.file.vim - then the
+" priority can be automatically inferred from the filename.
+"
+" call roarie_commands#AddMenu("&File")
+
+"
+" Adds a pseudo-mapping (purely descriptive, no mapping is executed,)
+" a regular mapping, and a regular mapping with a function keys
+" menu item to the "File" menu.
+"
 call roarie_commands#AddIMapping("&File", "complete", "Complete in insert mode...", "Complete in insert mode...", '', '<S-Tab>', '', "<pseudo>")
 call roarie_commands#AddSeparator("&File")
 call roarie_commands#AddMapping("&File", "buffer_next", "Next &buffer", "Go to next buffer in buffer list", "<silent>", '<S-Tab>', ':<C-U>bn<CR>')
@@ -84,7 +95,7 @@ call roarie_commands#SetupFnMenus(
 	\ [100, 150],
 	\ [7, 12], [2, 2])
 
-" Call this near or at the end of your ~/.vimrc. 
+" Call this near or at the end of your ~/.vimrc.
 call roarie_commands#Install()
 
 " Map this in order to activate the menu bar.
