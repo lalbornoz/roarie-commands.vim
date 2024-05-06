@@ -6,7 +6,6 @@
 local utils = require("roarie-utils")
 local utils_buffer = require("roarie-utils.buffer")
 local utils_menu = require("roarie-utils.menu")
-local utf8 = require("utf8")
 
 local M = {}
 
@@ -30,9 +29,9 @@ function get_dimensions(menus, w, h)
 		if item["display"] ~= "--" then
 			if string.match(item["display"], "\t") ~= nil then
 				local display_ = {unpack(utils.split(item["display"], "[^\t]+"), 1, 2)}
-				w = math.max(w, 2 + 2 + utf8.len(display_[1]) + 3 + utf8.len(display_[2]) + 2)
+				w = math.max(w, 2 + 2 + utils.ulen(display_[1]) + 3 + utils.ulen(display_[2]) + 2)
 			else
-				w = math.max(w, 2 + 2 + utf8.len(item["display"]) + 2)
+				w = math.max(w, 2 + 2 + utils.ulen(item["display"]) + 2)
 			end
 		end
 		h = h + 1
@@ -52,7 +51,7 @@ function items_to_textlist(keys, cmdlist, menus, textlist, w)
 				add_key(keys, key_char, item_idx)
 
 				display = {unpack(utils.split(display, "[^\t]+"), 1, 2)}
-				local spacing = math.max(w - 2 - 2 - utf8.len(display[1]) - utf8.len(display[2]) - 2, 3)
+				local spacing = math.max(w - 2 - 2 - utils.ulen(display[1]) - utils.ulen(display[2]) - 2, 3)
 				display = display[1]:gsub("&", "") .. string.rep(" ", spacing) .. display[2]
 
 				menus.items[menus.idx].items[item_idx].menu_text = display

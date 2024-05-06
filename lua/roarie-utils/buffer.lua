@@ -3,12 +3,12 @@
 -- Partially based on vim-quickui code.
 --
 
-local utf8 = require("utf8")
-
 local border_chars_default = {'┌', '─', '┐', '│', '─', '│', '└', '─', '┘', '├', '┤'}
 
 local buffer_array = {}
 local buffer_cache = {}
+
+local utils = require("roarie-utils")
 
 local M = {}
 
@@ -55,7 +55,7 @@ M.frame = function(str, w, h, chars)
 	if w == -1 then
 		w = 0
 		for _, line in ipairs(str) do
-			w = math.max(w, utf8.len(line))
+			w = math.max(w, utils.ulen(line))
 		end
 		w = w + 2
 	end
@@ -77,9 +77,9 @@ M.frame = function(str, w, h, chars)
 			is_sep = true
 			line = string.rep(chars[5], (w - 2))
 		end
-		if (not is_sep) and (utf8.len(line) < (w - 2)) then
-			line = line .. string.rep(" ", (w - utf8.len(line) - 2))
-		elseif (not is_sep) and (utf8.len(line) > (w - 2)) then
+		if (not is_sep) and (utils.ulen(line) < (w - 2)) then
+			line = line .. string.rep(" ", (w - utils.ulen(line) - 2))
+		elseif (not is_sep) and (utils.ulen(line) > (w - 2)) then
 			line = string.sub(line, 1, (w - 2))
 		end
 		if not is_sep then

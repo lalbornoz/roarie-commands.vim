@@ -48,7 +48,7 @@ function AddMapping_(noaddfl, menu, id, title, mode, descr, silent, lhs, rhs, ps
 	local map_line = {GetMappingMode(mode, lhs)}
 
 	if noaddfl == 0 then
-		if descr:len() == 0 then
+		if utils.ulen(descr) == 0 then
 			descr = title
 		end
 
@@ -98,7 +98,7 @@ function AddMapping_(noaddfl, menu, id, title, mode, descr, silent, lhs, rhs, ps
 	end
 
 	if pseudofl ~= "<pseudo>" then
-		if silent:len() > 0 then
+		if utils.ulen(silent) > 0 then
 			table.insert(map_line, '<silent>')
 		end
 

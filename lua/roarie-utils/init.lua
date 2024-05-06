@@ -3,6 +3,8 @@
 -- Partially based on vim-quickui code.
 --
 
+local utf8 = require("utf8")
+
 local M = {}
 
 M.termcodes = {
@@ -20,6 +22,21 @@ M.termcodes = {
 	End=vim.api.nvim_replace_termcodes('<End>', true, false, true),
 }
 
+-- {{{ M.array_next = function(array, idx_cur)
+M.array_next = function(array, value)
+	local array_len = table.getn(array)
+	for idx, value_cur in ipairs(array) do
+		if value_cur == value then
+			if (idx + 1) <= array_len then
+				return array[(idx + 1)]
+			else
+				return array[1]
+			end
+		end
+	end
+	return array[1]
+end
+-- }}}
 -- {{{ M.copy_config = function(config, config_defaults, config_new)
 M.copy_config = function(config, config_defaults, config_new)
 	for k, v in pairs(config_defaults) do
@@ -113,24 +130,18 @@ M.split = function(str, pattern)
 	return list
 end
 -- }}}
--- {{{ M.array_next = function(array, idx_cur)
-M.array_next = function(array, value)
-	local array_len = table.getn(array)
-	for idx, value_cur in ipairs(array) do
-		if value_cur == value then
-			if (idx + 1) <= array_len then
-				return array[(idx + 1)]
-			else
-				return array[1]
-			end
-		end
-	end
-	return array[1]
-end
--- }}}
 -- {{{ M.to_title(str)
 M.to_title = function(str)
   return (str:gsub("^%l", string.upper))
+end
+-- }}}
+-- {{{ M.ulen = function(str)
+M.ulen = function(str)
+	if str == "" then
+		return 0
+	else
+		return utf8.len(str)
+	end
 end
 -- }}}
 
