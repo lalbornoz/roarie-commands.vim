@@ -32,7 +32,7 @@ function get_menu_keys()
           n = n + 1
           menu_keys[n] = {
             descr = item["descr"],
-            display = menu:gsub("&", "") .. ": " .. item["title"]:gsub("&", ""),
+            display = menu:gsub("&", "") .. ": " .. item["icon"] .. " " .. item["title"]:gsub("&", ""),
             icon = item["icon"],
             id = item["id"],
             lhs = item["lhs"],
