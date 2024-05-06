@@ -11,7 +11,7 @@ local config_defaults = {
 		"<[a-z],{Page,}{Down,Up},Home,End>  Select menu items",
 		"<{Space,Enter}>                    Activate menu item",
 	},
-	help_text = "Press ? for help",
+	help_text = "Press   for help",
 
 	highlights = {
 		QuickBG = {ctermfg=251, ctermbg=236, fg="#c6c6c6", bg="#303030"},

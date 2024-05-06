@@ -5,6 +5,7 @@
 
 local utils = require("roarie-utils")
 local utils_buffer = require("roarie-utils.buffer")
+local utf8 = require("utf8")
 
 local M = {}
 
@@ -69,7 +70,7 @@ M.init = function(menus, help_text)
 	for priority, menu_ in utils.spairs(menus, order_fn) do
 		local _, key_char, key_pos = M.highlight_accel(nil, menu_.name, -1, 1)
 		local name = menu_.name:gsub("&", "")
-		local w = name:len() + 2
+		local w = utf8.len(name) + 2
 
 		menu.text = menu.text .. " " .. name .. " " .. "  "
 		table.insert(menu.items, {
@@ -88,7 +89,7 @@ M.init = function(menus, help_text)
 	if help_text ~= nil then
 		menu.text =
 			   menu.text
-			.. string.rep(" ", (vim.o.columns - menu.text:len() - help_text:len() - 1))
+			.. string.rep(" ", (vim.o.columns - utf8.len(menu.text) - utf8.len(help_text) - 1))
 			.. help_text
 	end
 
