@@ -43,8 +43,8 @@ local utils = require("roarie-utils")
 
 local M = {}
 
--- {{{ function AddMapping_(noaddfl, menu, id, title, mode, descr, silent, lhs, rhs, pseudofl)
-function AddMapping_(noaddfl, menu, id, title, mode, descr, silent, lhs, rhs, pseudofl)
+-- {{{ function AddMapping_(noaddfl, menu, id, title, mode, descr, silent, lhs, rhs, pseudofl, icon)
+function AddMapping_(noaddfl, menu, id, title, mode, descr, silent, lhs, rhs, pseudofl, icon)
 	local map_line = {GetMappingMode(mode, lhs)}
 
 	if noaddfl == 0 then
@@ -68,6 +68,7 @@ function AddMapping_(noaddfl, menu, id, title, mode, descr, silent, lhs, rhs, ps
 			action=action,
 			descr=descr,
 			display=display,
+			icon=icon,
 			id=id,
 			lhs=lhs,
 			menu=menu,
@@ -93,7 +94,7 @@ function AddMapping_(noaddfl, menu, id, title, mode, descr, silent, lhs, rhs, ps
 		AddMapping_(
 			noaddfl, fn_tmp_menu, id, title,
 			mode, descr, silent, lhs, rhs,
-			"<pseudo>")
+			"<pseudo>", icon)
 	end
 
 	if pseudofl ~= "<pseudo>" then
@@ -195,35 +196,35 @@ function SortMenus(lhs, rhs)
 end
 -- }}}
 
--- {{{ M.AddMapping = function(menu, id, title, descr, silent, lhs, rhs, ...)
-M.AddMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl)
-	return AddMapping_(0, menu, id, title, 'nvo', descr, silent, lhs, rhs, pseudofl)
+-- {{{ M.AddMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl, icon)
+M.AddMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl, icon)
+	return AddMapping_(0, menu, id, title, 'nvo', descr, silent, lhs, rhs, pseudofl, icon)
 end
 -- }}}
--- {{{ M.AddIMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl)
-M.AddIMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl)
-	return AddMapping_(0, menu, id, title, 'insert', descr, silent, lhs, rhs, pseudofl)
+-- {{{ M.AddIMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl, icon)
+M.AddIMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl, icon)
+	return AddMapping_(0, menu, id, title, 'insert', descr, silent, lhs, rhs, pseudofl, icon)
 end
 -- }}}
--- {{{ M.AddINVOMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl)
-M.AddINVOMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl)
-	AddMapping_(0, menu, id, title, 'nvo', descr, silent, lhs, rhs, pseudofl)
-	return AddMapping_(1, menu, id, title, 'insert', descr, silent, lhs, rhs, pseudofl)
+-- {{{ M.AddINVOMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl, icon)
+M.AddINVOMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl, icon)
+	AddMapping_(0, menu, id, title, 'nvo', descr, silent, lhs, rhs, pseudofl, icon)
+	return AddMapping_(1, menu, id, title, 'insert', descr, silent, lhs, rhs, pseudofl, icon)
 end
 -- }}}
--- {{{ M.AddNMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl)
-M.AddNMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl)
-	return AddMapping_(0, menu, id, title, 'normal', descr, silent, lhs, rhs, pseudofl)
+-- {{{ M.AddNMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl, icon)
+M.AddNMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl, icon)
+	return AddMapping_(0, menu, id, title, 'normal', descr, silent, lhs, rhs, pseudofl, icon)
 end
 -- }}}
--- {{{ M.AddTMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl)
-M.AddTMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl)
-	return AddMapping_(0, menu, id, title, 'terminal', descr, silent, lhs, rhs, pseudofl)
+-- {{{ M.AddTMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl, icon)
+M.AddTMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl, icon)
+	return AddMapping_(0, menu, id, title, 'terminal', descr, silent, lhs, rhs, pseudofl, icon)
 end
 -- }}}
--- {{{ M.AddVMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl)
-M.AddVMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl)
-	return AddMapping_(0, menu, id, title, 'visual', descr, silent, lhs, rhs, pseudofl)
+-- {{{ M.AddVMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl, icon)
+M.AddVMapping = function(menu, id, title, descr, silent, lhs, rhs, pseudofl, icon)
+	return AddMapping_(0, menu, id, title, 'visual', descr, silent, lhs, rhs, pseudofl, icon)
 end
 -- }}}
 

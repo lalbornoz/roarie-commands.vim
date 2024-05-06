@@ -3,7 +3,8 @@
 This plugin implements a unified interface for adding self-documenting
 mappings/commands and a menu UI akin to Turbo Pascal, etc. as well as
 an optional [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
-command palette picker. Both Neovim as well as Vim, with [vim-quickui](https://github.com/skywind3000/vim-quickui)
+command palette picker. Both Neovim, with [utf8.nvim](https://github.com/uga-rosa/utf8.nvim)
+as dependency, as well as Vim, with [vim-quickui](https://github.com/skywind3000/vim-quickui)
 as dependency, are supported.
 
 # Demo
@@ -80,6 +81,10 @@ call roarie_commands#AddSeparator("&File")
 call roarie_commands#AddMapping("&File", "buffer_next", "Next &buffer", "Go to next buffer in buffer list", "<silent>", '<S-Tab>', ':<C-U>bn<CR>')
 call roarie_commands#AddSeparator("&File")
 call roarie_commands#AddMapping("&File", "read_program", "&Read from program...", "Read from program prompt into new scratch window", '', '<M-F9>', ':<C-U>CReadNewScratch ', "<fnalias>")
+
+" The following mapping specifies an icon, which is prefixed to the
+" menu item title.
+call roarie_commands#AddMapping("&Project", "build", "&Build...", "Build project w/ BuildMe and .buildme.sh", "<silent>", '<F5>', ':<C-U>BuildMe<CR>', "<fnalias>", "")
 
 "
 " If desired, menus encompassing all mappings that are mapped by

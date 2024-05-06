@@ -7,43 +7,43 @@ if has('nvim')
 " {{{ fun! roarie_commands#AddMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 fun! roarie_commands#AddMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 	call luaeval(
-		\ 'require("roarie-menu").AddMapping(_A[1], _A[2], _A[3], _A[4], _A[5], _A[6], _A[7], _A[8])',
-		\ [a:menu, a:id, a:title, a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, "")])
+		\ 'require("roarie-menu").AddMapping(_A[1], _A[2], _A[3], _A[4], _A[5], _A[6], _A[7], _A[8], _A[9])',
+		\ [a:menu, a:id, a:title, a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, ""), get(a:, 2, " ")])
 endfun
 " }}}
 " {{{ fun! roarie_commands#AddIMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 fun! roarie_commands#AddIMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 	call luaeval(
-		\ 'require("roarie-menu").AddIMapping(_A[1], _A[2], _A[3], _A[4], _A[5], _A[6], _A[7], _A[8])',
-		\ [a:menu, a:id, a:title, a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, "")])
+		\ 'require("roarie-menu").AddIMapping(_A[1], _A[2], _A[3], _A[4], _A[5], _A[6], _A[7], _A[8], _A[9])',
+		\ [a:menu, a:id, a:title, a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, ""), get(a:, 2, " ")])
 endfun
 " }}}
 " {{{ fun! roarie_commands#AddINVOMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 fun! roarie_commands#AddINVOMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 	call luaeval(
-		\ 'require("roarie-menu").AddINVOMapping(_A[1], _A[2], _A[3], _A[4], _A[5], _A[6], _A[7], _A[8])',
-		\ [a:menu, a:id, a:title, a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, "")])
+		\ 'require("roarie-menu").AddINVOMapping(_A[1], _A[2], _A[3], _A[4], _A[5], _A[6], _A[7], _A[8], _A[9])',
+		\ [a:menu, a:id, a:title, a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, ""), get(a:, 2, " ")])
 endfun
 " }}}
 " {{{ fun! roarie_commands#AddNMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 fun! roarie_commands#AddNMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 	call luaeval(
-		\ 'require("roarie-menu").AddNMapping(_A[1], _A[2], _A[3], _A[4], _A[5], _A[6], _A[7], _A[8])',
-		\ [a:menu, a:id, a:title, a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, "")])
+		\ 'require("roarie-menu").AddNMapping(_A[1], _A[2], _A[3], _A[4], _A[5], _A[6], _A[7], _A[8], _A[9])',
+		\ [a:menu, a:id, a:title, a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, ""), get(a:, 2, " ")])
 endfun
 " }}}
 " {{{ fun! roarie_commands#AddTMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 fun! roarie_commands#AddTMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 	call luaeval(
-		\ 'require("roarie-menu").AddTMapping(_A[1], _A[2], _A[3], _A[4], _A[5], _A[6], _A[7], _A[8])',
-		\ [a:menu, a:id, a:title, a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, "")])
+		\ 'require("roarie-menu").AddTMapping(_A[1], _A[2], _A[3], _A[4], _A[5], _A[6], _A[7], _A[8], _A[9])',
+		\ [a:menu, a:id, a:title, a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, ""), get(a:, 2, " ")])
 endfun
 " }}}
 " {{{ fun! roarie_commands#AddVMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 fun! roarie_commands#AddVMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 	call luaeval(
-		\ 'require("roarie-menu").AddVMapping(_A[1], _A[2], _A[3], _A[4], _A[5], _A[6], _A[7], _A[8])',
-		\ [a:menu, a:id, a:title, a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, "")])
+		\ 'require("roarie-menu").AddVMapping(_A[1], _A[2], _A[3], _A[4], _A[5], _A[6], _A[7], _A[8], _A[9])',
+		\ [a:menu, a:id, a:title, a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, ""), get(a:, 2, " ")])
 endfun
 " }}}
 

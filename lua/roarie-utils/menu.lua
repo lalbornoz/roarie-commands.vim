@@ -32,8 +32,8 @@ M.find = function(key_char, menus)
 	end
 end
 -- }}}
--- {{{ M.get_key = function(cmdlist, display, y)
-M.get_key = function(cmdlist, display, y)
+-- {{{ M.highlight_accel = function(cmdlist, display, y, x_offset)
+M.highlight_accel = function(cmdlist, display, y, x_offset)
 	local key_pos = vim.fn.match(display, "&")
 	local key_char = nil
 	if key_pos >= 0 then
@@ -41,7 +41,11 @@ M.get_key = function(cmdlist, display, y)
 		key_char = string.lower(string.sub(display, key_pos + 1, key_pos + 1))
 		if cmdlist ~= nil then
 			local x = key_pos + 2
-			table.insert(cmdlist, utils.highlight_region('QuickKey', y, x, y, x + 1, true))
+			table.insert(
+				cmdlist,
+				utils.highlight_region(
+					'QuickKey', y, x + x_offset,
+					y, x + x_offset + 1, true))
 		end
 	end
 	return display:gsub("&", ""), key_char, key_pos
@@ -63,7 +67,7 @@ M.init = function(menus, help_text)
 	end
 	local x = 0
 	for priority, menu_ in utils.spairs(menus, order_fn) do
-		local _, key_char, key_pos = M.get_key(nil, menu_.name, -1)
+		local _, key_char, key_pos = M.highlight_accel(nil, menu_.name, -1, 1)
 		local name = menu_.name:gsub("&", "")
 		local w = name:len() + 2
 

@@ -33,11 +33,12 @@ function get_menu_keys()
           menu_keys[n] = {
             descr = item["descr"],
             display = menu:gsub("&", "") .. ": " .. item["title"]:gsub("&", ""),
+            icon = item["icon"],
             id = item["id"],
             lhs = item["lhs"],
             menu = menu:gsub("&", ""),
             mode = item["mode"],
-            ordinal = item["lhs"] .. item["title"]:gsub("&", "") .. " " .. item["id"],
+            ordinal = item["icon"] .. item["lhs"] .. item["title"]:gsub("&", "") .. " " .. item["id"],
             rhs = item["rhs"],
             value = nil,
           }
@@ -95,6 +96,9 @@ palette.palette = function(opts)
             "",
             "Mode:",
             utils.to_title((entry.mode == "nvo") and ("Normal, Visual, Operator-pending") or entry.mode),
+            "",
+            "Icon:",
+            entry.icon,
           }
         end
         vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)

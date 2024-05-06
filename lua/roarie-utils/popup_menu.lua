@@ -6,6 +6,7 @@
 local utils = require("roarie-utils")
 local utils_buffer = require("roarie-utils.buffer")
 local utils_menu = require("roarie-utils.menu")
+local utf8 = require("utf8")
 
 local M = {}
 
@@ -29,9 +30,9 @@ function get_dimensions(menus, w, h)
 		if item["display"] ~= "--" then
 			if string.match(item["display"], "\t") ~= nil then
 				local display_ = {unpack(utils.split(item["display"], "[^\t]+"), 1, 2)}
-				w = math.max(w, 2 + display_[1]:len() + 3 + display_[2]:len() + 2)
+				w = math.max(w, 2 + 2 + utf8.len(display_[1]) + 3 + utf8.len(display_[2]) + 2)
 			else
-				w = math.max(w, 2 + item["display"]:len() + 2)
+				w = math.max(w, 2 + 2 + utf8.len(item["display"]) + 2)
 			end
 		end
 		h = h + 1
@@ -39,31 +40,30 @@ function get_dimensions(menus, w, h)
 	return w, h
 end
 -- }}}
--- {{{ function get_keys(keys, cmdlist, menus, textlist, w)
-function get_keys(keys, cmdlist, menus, textlist, w)
+-- {{{ function items_to_textlist(keys, cmdlist, menus, textlist, w)
+function items_to_textlist(keys, cmdlist, menus, textlist, w)
 	local y = 1
 	for item_idx, item in ipairs(menus.items[menus.idx].items) do
 		y = y + 1
 		if item["display"] ~= "--" then
 			if string.match(item["display"], "\t") ~= nil then
 				local display = item["display"]
-				display, key_char = utils_menu.get_key(cmdlist, display, y)
+				display, key_char = utils_menu.highlight_accel(cmdlist, display, y, 2)
 				add_key(keys, key_char, item_idx)
 
 				display = {unpack(utils.split(display, "[^\t]+"), 1, 2)}
-				local spacing = math.max(w - 2 - display[1]:len() - display[2]:len() - 2, 3)
+				local spacing = math.max(w - 2 - 2 - utf8.len(display[1]) - utf8.len(display[2]) - 2, 3)
 				display = display[1]:gsub("&", "") .. string.rep(" ", spacing) .. display[2]
 
 				menus.items[menus.idx].items[item_idx].menu_text = display
-				table.insert(textlist, " " .. display .. " ")
-
+				table.insert(textlist, " " .. item["icon"] .. " " .. display .. " ")
 			else
 				local display = item["display"]
-				display, key_char = utils_menu.get_key(cmdlist, display)
+				display, key_char = utils_menu.highlight_accel(cmdlist, display, y, 2)
 				add_key(keys, key_char, item_idx)
 
 				menus.items[menus.idx].items[item_idx].menu_text = display
-				table.insert(textlist, " " .. display .. " ")
+				table.insert(textlist, " " .. item["icon"] .. " " .. display .. " ")
 			end
 		else
 			table.insert(textlist, "--")
@@ -85,12 +85,17 @@ function select_item(idx_new, menu_popup, menus)
 			table.insert(cmdlist, utils.highlight_region(
 				'QuickSel',
 				menu_popup.idx + 1, 2,
-				menu_popup.idx + 1, map_x0 + 2,
+				menu_popup.idx + 1, map_x0 + 4,
 				true))
 			table.insert(cmdlist, utils.highlight_region(
 				'QuickSelMap',
-				menu_popup.idx + 1, map_x0 + 2,
-				menu_popup.idx + 1, map_x1 + 3,
+				menu_popup.idx + 1, map_x0 + 4,
+				menu_popup.idx + 1, map_x1 + 5,
+				true))
+			table.insert(cmdlist, utils.highlight_region(
+				'QuickSel',
+				menu_popup.idx + 1, map_x1 + 5,
+				menu_popup.idx + 1, map_x1 + 6,
 				true))
 		else
 			table.insert(cmdlist, utils.highlight_region(
@@ -144,7 +149,7 @@ M.open = function(menus, menu_popup, key_char)
 		return menu_popup
 	else
 		w, h = get_dimensions(menus, w, h)
-		get_keys(keys, cmdlist, menus, textlist, w)
+		items_to_textlist(keys, cmdlist, menus, textlist, w)
 		textlist = utils_buffer.frame(textlist, w, h, nil)
 		menu_popup = M.close(menu_popup, true)
 	end
