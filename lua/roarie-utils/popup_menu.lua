@@ -149,7 +149,7 @@ M.open = function(menus, menu_popup, key_char)
 	else
 		w, h = get_dimensions(menus, w, h)
 		items_to_textlist(keys, cmdlist, menus, textlist, w)
-		textlist = utils_buffer.frame(textlist, w, h, nil)
+		textlist = utils_buffer.frame(textlist, w, -1, nil)
 		menu_popup = M.close(menu_popup, true)
 	end
 

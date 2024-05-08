@@ -34,6 +34,7 @@ require("roarie-commands").setup({
 		"<{Down,Space}>                       Open menu",
 		"<[a-z]>, <{Page,}Down,Up,Home,End>   Select menu items",
 		"<{Space,Enter}>                      Activate menu item",
+		"<{M-[a-z]}>                          In submenu: select item with accelerator",
 	},
 	help_text = "Press ? for help",
 

@@ -60,7 +60,7 @@ M.frame = function(str, w, h, chars)
 		w = w + 2
 	end
 	if h == -1 then
-		h = table.getn(str)
+		h = #str
 	end
 
 	if chars == nil then
@@ -68,8 +68,8 @@ M.frame = function(str, w, h, chars)
 	end
 
 	str_[1] = chars[1] .. string.rep(chars[2], w - 2) .. chars[3]
-	for y=2,(h - 1) do
-		local line = str[y - 1]
+	for y=1,h do
+		local line = str[y]
 		local is_sep = false
 		if line == nil then
 			line = ""
@@ -83,12 +83,12 @@ M.frame = function(str, w, h, chars)
 			line = string.sub(line, 1, (w - 2))
 		end
 		if not is_sep then
-			str_[y] = chars[4] .. line .. chars[6]
+			table.insert(str_, chars[4] .. line .. chars[6])
 		else
-			str_[y] = chars[10] .. line .. chars[11]
+			table.insert(str_, chars[10] .. line .. chars[11])
 		end
 	end
-	str_[h] = chars[7] .. string.rep(chars[8], w - 2) .. chars[9]
+	table.insert(str_, chars[7] .. string.rep(chars[8], w - 2) .. chars[9])
 
 	return str_
 end

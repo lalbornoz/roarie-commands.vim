@@ -28,7 +28,7 @@ M.open = function(help_screen)
 			noautocmd=1,
 			relative='editor',
 			style='minimal',
-			width=vim.o.columns, height=table.getn(help_screen),
+			width=vim.o.columns, height=#help_screen + 2,
 		}
 
 		help_window.bid = utils_buffer.create_scratch("help", textlist)

@@ -130,7 +130,7 @@ M.open = function(col, row, submenu, submenu_win)
 	if submenu.keys == nil then
 		submenu.keys = keys
 	end
-	textlist = utils_buffer.frame(textlist, w, h, nil)
+	textlist = utils_buffer.frame(textlist, w, h - 2, nil)
 	submenu_win = M.close(submenu_win, true)
 
 	if col == -1 then
