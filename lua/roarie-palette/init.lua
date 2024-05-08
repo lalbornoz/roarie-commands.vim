@@ -19,8 +19,8 @@ local previewers = require "telescope.previewers"
 local roarie_menu = require("roarie-menu")
 local utils = require("roarie-utils")
 
--- {{{ function get_menu_keys()
-function get_menu_keys()
+-- {{{ local function get_menu_keys()
+local function get_menu_keys()
   local menu_keys = {}
   local n = 0
 

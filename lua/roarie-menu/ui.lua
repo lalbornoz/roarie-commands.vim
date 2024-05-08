@@ -4,18 +4,20 @@
 --
 
 local menus = {}
+local submenus = {}
 
 local config = require("roarie-menu.config")
 local utils = require("roarie-utils")
 local utils_help_screen = require("roarie-utils.help_screen")
 local utils_menu = require("roarie-utils.menu")
 local utils_popup_menu = require("roarie-utils.popup_menu")
+local utils_submenu = require("roarie-utils.submenu")
 
 local M = {}
 
--- {{{ function menu_loop(loop_status, menu_popup, menus, help_screen)
-function menu_loop(loop_status, menu_popup, menus, help_screen)
-	guicursor_old, hl_cursor_old = utils_menu.update(menus)
+-- {{{ local function menu_loop(loop_status, menu_popup, menus, help_screen)
+local function menu_loop(loop_status, menu_popup, menus, help_screen)
+	local guicursor_old, hl_cursor_old = utils_menu.update(menus)
 	vim.cmd [[redraw]]
 
 	local menu_popup_idx = nil
@@ -93,6 +95,42 @@ function menu_loop(loop_status, menu_popup, menus, help_screen)
 end
 -- }}}
 
+-- {{{ M.AddSubMenu = function(id, title)
+M.AddSubMenu = function(id, title)
+	submenus[id] = {}
+	submenus[id]['idx'] = 0
+	submenus[id]['idx_max'] = 0
+	submenus[id]['items'] = {}
+	submenus[id]['keys'] = nil
+	submenus[id]['open'] = false
+	submenus[id]['title'] = title
+	submenus[id]['h'] = 0
+	submenus[id]['w'] = 0
+end
+-- }}}
+-- {{{ M.AddSubMenuItem = function(id, icon, title, rhs)
+M.AddSubMenuItem = function(id, icon, title, rhs)
+	local display = title:gsub("&", "")
+	local key_pos = vim.fn.match(title, "&")
+	local key_char = nil
+
+	if key_pos >= 0 then
+		key_pos = key_pos + 1
+		key_char = string.lower(string.sub(display, key_pos + 1, key_pos + 1))
+	end
+
+	submenus[id].idx_max = submenus[id].idx_max + 1
+	submenus[id].w = math.max(submenus[id].w, utils.ulen(icon .. " " .. display) + 2 + 2)
+	table.insert(submenus[id]['items'], {
+		display=title,
+		icon=icon,
+		key_char=key_char, key_pos=key_pos,
+		term=term,
+		rhs=rhs,
+		w=utils.ulen(display),
+	})
+end
+-- }}}
 -- {{{ M.Install = function(menu, items, priority)
 M.Install = function(menu, items, priority)
 	menus[priority] = {
@@ -104,7 +142,7 @@ end
 -- }}}
 -- {{{ M.OpenMenu = function()
 M.OpenMenu = function()
-	local loop_status = true
+	local loop_status, menu_popup_idx = true, 0
 	local menus, menu_popup = utils_menu.init(menus, config.help_text),
 				  utils_popup_menu.init()
 
@@ -126,6 +164,18 @@ M.OpenMenu = function()
 				menus.items[menus.idx].items[menu_popup_idx].lhs,
 				true, true, true))
 	end
+end
+-- }}}
+-- {{{ M.OpenSubMenu = function(id)
+M.OpenSubMenu = function(id)
+	local loop_status, submenu_str = true, 0, ""
+	local submenu_win = utils_submenu.init()
+	if #submenus[id].items > 0 then
+		if submenus[id].items[#submenus[id].items].display ~= "--" then
+			M.AddSubMenuItem(id, " ", "--", "")
+		end
+	end
+	utils_submenu.open(-1, -1, submenus[id], submenu_win)
 end
 -- }}}
 -- {{{ M.Reset = function()

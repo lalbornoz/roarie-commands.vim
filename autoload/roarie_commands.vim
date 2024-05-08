@@ -62,6 +62,20 @@ fun! roarie_commands#AddSeparator(menu)
 		\ [a:menu])
 endfun
 " }}}
+" {{{ fun! roarie_commands#AddSubMenu(id, title)
+fun! roarie_commands#AddSubMenu(id, title)
+	call luaeval(
+		\ 'require("roarie-menu.ui").AddSubMenu(_A[1], _A[2])',
+		\ [a:id, a:title])
+endfun
+" }}}
+" {{{ fun! roarie_commands#AddSubMenuItem(id, icon, title, rhs)
+fun! roarie_commands#AddSubMenuItem(id, icon, title, rhs)
+	call luaeval(
+		\ 'require("roarie-menu.ui").AddSubMenuItem(_A[1], _A[2], _A[3], _A[4])',
+		\ [a:id, a:icon, a:title, a:rhs])
+endfun
+" }}}
 
 " {{{ fun! roarie_commands#GetMapping(menu, id)
 fun! roarie_commands#GetMapping(menu, id)
@@ -89,6 +103,13 @@ endfun
 " {{{ fun! roarie_commands#OpenMenu()
 fun! roarie_commands#OpenMenu()
 	lua require("roarie-menu.ui").OpenMenu()
+endfun
+" }}}
+" {{{ fun! roarie_commands#OpenSubMenu(id)
+fun! roarie_commands#OpenSubMenu(id)
+	call luaeval(
+		\ 'require("roarie-menu.ui").OpenSubMenu(_A[1])',
+		\ [a:id])
 endfun
 " }}}
 
@@ -314,6 +335,14 @@ fun! roarie_commands#AddSeparator(menu)
 		\ }]
 endfun
 " }}}
+" {{{ fun! roarie_commands#AddSubMenu(id, title)
+fun! roarie_commands#AddSubMenu(id, title)
+endfun
+" }}}
+" {{{ fun! roarie_commands#AddSubMenuItem(id, icon, title, rhs)
+fun! roarie_commands#AddSubMenuItem(id, icon, title, rhs)
+endfun
+" }}}
 
 " {{{ fun! roarie_commands#GetMapping(menu, id)
 fun! roarie_commands#GetMapping(menu, id)
@@ -362,6 +391,10 @@ endfun
 " {{{ fun! roarie_commands#OpenMenu()
 fun! roarie_commands#OpenMenu()
 	call quickui#menu#open()
+endfun
+" }}}
+" {{{ fun! roarie_commands#OpenSubMenu(id)
+fun! roarie_commands#OpenSubMenu(id)
 endfun
 " }}}
 

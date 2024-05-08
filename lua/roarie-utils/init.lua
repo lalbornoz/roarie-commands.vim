@@ -59,10 +59,11 @@ end
 -- {{{ M.getchar = function()
 M.getchar = function()
 	local rc, code = pcall(vim.fn.getchar)
+
 	if not rc then
 		if code == "Keyboard interrupt" then code = M.termcodes.ETX else error(rc) end
 	end
-	return code, vim.fn.nr2char(code)
+	return code, vim.fn.nr2char(code), vim.fn.getcharmod()
 end
 -- }}}
 -- {{{ M.serialise_table = function(val, name, skipnewlines, depth)

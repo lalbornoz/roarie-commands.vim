@@ -9,8 +9,8 @@ local utils_menu = require("roarie-utils.menu")
 
 local M = {}
 
--- {{{ function add_key(keys, key_char, item_idx)
-function add_key(keys, key_char, item_idx)
+-- {{{ local function add_key(keys, key_char, item_idx)
+local function add_key(keys, key_char, item_idx)
 	if key_char ~= nil then
 		if keys[key_char] ~= nil then
 			if type(keys[key_char]) ~= "table" then
@@ -23,8 +23,8 @@ function add_key(keys, key_char, item_idx)
 	end
 end
 -- }}}
--- {{{ function get_dimensions(menus, w, h)
-function get_dimensions(menus, w, h)
+-- {{{ local function get_dimensions(menus, w, h)
+local function get_dimensions(menus, w, h)
 	for _, item in ipairs(menus.items[menus.idx].items) do
 		if item["display"] ~= "--" then
 			if string.match(item["display"], "\t") ~= nil then
@@ -39,8 +39,8 @@ function get_dimensions(menus, w, h)
 	return w, h
 end
 -- }}}
--- {{{ function items_to_textlist(keys, cmdlist, menus, textlist, w)
-function items_to_textlist(keys, cmdlist, menus, textlist, w)
+-- {{{ local function items_to_textlist(keys, cmdlist, menus, textlist, w)
+local function items_to_textlist(keys, cmdlist, menus, textlist, w)
 	local y = 1
 	for item_idx, item in ipairs(menus.items[menus.idx].items) do
 		y = y + 1
@@ -70,8 +70,8 @@ function items_to_textlist(keys, cmdlist, menus, textlist, w)
 	end
 end
 -- }}}
--- {{{ function select_item(idx_new, menu_popup, menus)
-function select_item(idx_new, menu_popup, menus)
+-- {{{ local function select_item(idx_new, menu_popup, menus)
+local function select_item(idx_new, menu_popup, menus)
 	if idx_new ~= menu_popup.idx then
 		menu_popup.idx = idx_new
 

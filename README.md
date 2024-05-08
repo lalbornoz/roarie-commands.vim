@@ -7,10 +7,14 @@ command palette picker. Both Neovim, with [utf8.nvim](https://github.com/uga-ros
 as dependency, as well as Vim, with [vim-quickui](https://github.com/skywind3000/vim-quickui)
 as dependency, are supported.
 
-# Demo
-
+## Demo: Menu UI
 ![Menu UI](https://github.com/lalbornoz/roarie-commands.vim/blob/master/Screenshot1.png?raw=true)
+
+## Demo: Telescope command palette picker
 ![Telescope command palette picker](https://github.com/lalbornoz/roarie-commands.vim/blob/master/Screenshot2.png?raw=true)
+
+## Demo: Submenu UI w/ editable prompt
+![Submenu UI w/ editable prompt](https://github.com/lalbornoz/roarie-commands.vim/blob/master/Screenshot3.png?raw=true)
 
 # Installation
 
@@ -85,6 +89,25 @@ call roarie_commands#AddMapping("&File", "read_program", "&Read from program..."
 " The following mapping specifies an icon, which is prefixed to the
 " menu item title.
 call roarie_commands#AddMapping("&Project", "build", "&Build...", "Build project w/ BuildMe and .buildme.sh", "<silent>", '<F5>', ':<C-U>BuildMe<CR>', "<fnalias>", "")
+
+"
+" Adds a submenu titled "Git submenu" with id "git_submenu" and
+" a few submenu items and a mapping to open the submenu.
+"
+" Submenus are floating popup windows akin to " menus, though centered
+" on-screen and independent of the menu bar, that contain an editable
+" prompt buffer set to the right-hand side of each selected submenu item
+" on selection.
+"
+" This allows providing an additional editable UI to arbitrary Vim
+" command lines without mapping a key sequence to any of them except
+" for opening the submenu.
+"
+call roarie_commands#AddMapping("&Project", "git_submenu", "&Git submenu...", "Git submenu...", "<silent>", '<M-F6>', ':<C-U>call roarie_commands#OpenSubMenu("git_submenu")<CR>', "<fnalias>", "")
+call roarie_commands#AddSubMenu("git_submenu", "Git submenu")
+call roarie_commands#AddSubMenuItem("git_submenu", " ", "Git stat&us", ":Git")
+call roarie_commands#AddSubMenuItem("git_submenu", " ", "&Browse in web front-end", ":GBrowse")
+call roarie_commands#AddSubMenuItem("git_submenu", " ", "&Record changes to the repository", ":Git commit")
 
 "
 " If desired, menus encompassing all mappings that are mapped by
