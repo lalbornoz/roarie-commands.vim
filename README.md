@@ -28,13 +28,14 @@ When using Vim, no further specific setup is required. When using Neovim:
 --
 require("roarie-commands").setup({
 	help_screen = {
-		"<{Esc,C-C}>                          Exit menu mode",
-		"<{S-[a-z],[0-9]}>                    Select and open menu with accelerator",
-		"<{Left,Right}>                       Select menu; will open menu automatically if menu is not open",
-		"<{Down,Space}>                       Open menu",
-		"<[a-z]>, <{Page,}Down,Up,Home,End>   Select menu items",
-		"<{Space,Enter}>                      Activate menu item",
-		"<{M-[a-z]}>                          In submenu: select item with accelerator",
+		"<{Esc,C-C}>                             Exit menu mode",
+		"<{S-[a-z],[0-9]}>                       Select and open menu with accelerator",
+		"<{Left,Right}>                          Select menu; will open menu automatically if menu is not open",
+		"<{Down,Space}>                          Open menu",
+		"<M-[a-z]>, <{Page,}{Down,Up},Home,End>  In menu: select item, scroll through items",
+		"<{Space,Enter}>                         In menu: activate menu item",
+		"<M-[a-z]>, <{Page,}{Down,Up}>           In submenu: select item with accelerator",
+		"<Enter>                                 In submenu: execute prompt",
 	},
 	help_text = "Press ? for help",
 

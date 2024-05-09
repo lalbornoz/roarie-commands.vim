@@ -51,7 +51,7 @@ endfun
 fun! roarie_commands#AddMenu(title, ...)
 	let l:priority = get(a:, 1, str2nr(substitute(expand('<sfile>:t'), '\..*$', '', '')))
 	call luaeval(
-		\ 'require("roarie-menu").AddMenu(_A[1], _A[2], _A[3])',
+		\ 'require("roarie-menu").AddMenu(_A[1], _A[2], (_A[3] == 1))',
 		\ [a:title, l:priority, get(a:, 2, 0)])
 endfun
 " }}}
@@ -62,17 +62,17 @@ fun! roarie_commands#AddSeparator(menu)
 		\ [a:menu])
 endfun
 " }}}
-" {{{ fun! roarie_commands#AddSubMenu(id, title)
-fun! roarie_commands#AddSubMenu(id, title)
+" {{{ fun! roarie_commands#AddSubMenu(id, title, ...)
+fun! roarie_commands#AddSubMenu(id, title, ...)
 	call luaeval(
-		\ 'require("roarie-menu.ui").AddSubMenu(_A[1], _A[2])',
-		\ [a:id, a:title])
+		\ 'require("roarie-menu").AddSubMenu(_A[1], _A[2], (_A[3] == 1))',
+		\ [a:id, a:title, get(a:, 3, 0)])
 endfun
 " }}}
 " {{{ fun! roarie_commands#AddSubMenuItem(id, icon, title, rhs)
 fun! roarie_commands#AddSubMenuItem(id, icon, title, rhs)
 	call luaeval(
-		\ 'require("roarie-menu.ui").AddSubMenuItem(_A[1], _A[2], _A[3], _A[4])',
+		\ 'require("roarie-menu").AddSubMenuItem(_A[1], _A[2], _A[3], _A[4])',
 		\ [a:id, a:icon, a:title, a:rhs])
 endfun
 " }}}
@@ -87,9 +87,6 @@ endfun
 
 " {{{ fun! roarie_commands#Install()
 fun! roarie_commands#Install()
-	call luaeval(
-		\ 'require("roarie-menu").Install()'
-		\ )
 endfun
 " }}}
 "" {{{ fun! roarie_commands#SetupFnMenus(ltitle, lpriority, lkey_to, lsep_each)
@@ -102,13 +99,13 @@ endfun
 
 " {{{ fun! roarie_commands#OpenMenu()
 fun! roarie_commands#OpenMenu()
-	lua require("roarie-menu.ui").OpenMenu()
+	lua require("roarie-menu").OpenMenu()
 endfun
 " }}}
 " {{{ fun! roarie_commands#OpenSubMenu(id)
 fun! roarie_commands#OpenSubMenu(id)
 	call luaeval(
-		\ 'require("roarie-menu.ui").OpenSubMenu(_A[1])',
+		\ 'require("roarie-menu").OpenSubMenu(_A[1])',
 		\ [a:id])
 endfun
 " }}}
@@ -335,8 +332,8 @@ fun! roarie_commands#AddSeparator(menu)
 		\ }]
 endfun
 " }}}
-" {{{ fun! roarie_commands#AddSubMenu(id, title)
-fun! roarie_commands#AddSubMenu(id, title)
+" {{{ fun! roarie_commands#AddSubMenu(id, title, ...)
+fun! roarie_commands#AddSubMenu(id, title, ...)
 endfun
 " }}}
 " {{{ fun! roarie_commands#AddSubMenuItem(id, icon, title, rhs)
