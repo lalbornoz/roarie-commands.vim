@@ -2,6 +2,7 @@
 -- Copyright (c) 2024 Lucía Andrea Illanes Albornoz <lucia@luciaillanes.de>
 --
 
+local config = require("roarie-menu.config")
 local utils = require("roarie-utils")
 local utils_buffer = require("roarie-utils.buffer")
 local utils_windows = require("roarie-windows.utils")
@@ -281,7 +282,7 @@ M.open = function(menus, menu_popup, key_char, is_current)
 	w, h = get_dimensions(menus, w, h)
 	menu_popup.keys = {}
 	map_items(menu_popup.keys, cmdlist, menus, textlist, w)
-	textlist = utils_buffer.frame(textlist, w, -1, nil)
+	textlist = utils_buffer.frame(textlist, w, -1, config.border_chars)
 	if menu_popup.open then
 		menu_popup = M.close(menu_popup, true)
 	end

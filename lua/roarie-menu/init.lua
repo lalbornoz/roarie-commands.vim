@@ -3,6 +3,13 @@
 --
 
 local config_defaults = {
+	border_chars = {
+		'╭', '─', '╮',
+		'│', '─', '│',
+		'╰', '─', '╯',
+		'├', '┤',
+	},
+
 	help_screen = {
 		"<{Esc,C-C}>                             Exit menu mode",
 		"<{S-[a-z],[0-9]}>                       Select and open menu with accelerator",

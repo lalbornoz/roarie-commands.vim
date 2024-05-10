@@ -2,7 +2,7 @@
 -- Copyright (c) 2024 Lucía Andrea Illanes Albornoz <lucia@luciaillanes.de>
 --
 
-local border_chars_default = {'┌', '─', '┐', '│', '─', '│', '└', '─', '┘', '├', '┤'}
+local border_chars_default = {'╭', '─', '╮', '│', '─', '│', '╰', '─', '╯', '├', '┤'}
 
 local utils = require("roarie-utils")
 

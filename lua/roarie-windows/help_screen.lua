@@ -2,6 +2,7 @@
 -- Copyright (c) 2024 Lucía Andrea Illanes Albornoz <lucia@luciaillanes.de>
 --
 
+local config = require("roarie-menu.config")
 local utils_buffer = require("roarie-utils.buffer")
 local utils_windows = require("roarie-windows.utils")
 
@@ -75,8 +76,12 @@ M.open = function(help_screen, parent, is_current)
 		setup_window(help_screen, help_window, is_current)
 		setup_maps(help_window, parent)
 
-		help_screen = utils_buffer.frame(help_screen, vim.o.columns, -1, nil)
-		vim.api.nvim_buf_set_lines(help_window.bid, 0, -1, true, help_screen)
+		help_screen = utils_buffer.frame(
+			help_screen, vim.o.columns,
+			-1, config.border_chars)
+		vim.api.nvim_buf_set_lines(
+			help_window.bid, 0, -1,
+			true, help_screen)
 		help_window.open = true
 	end
 end

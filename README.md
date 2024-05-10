@@ -27,6 +27,13 @@ When using Vim, no further specific setup is required. When using Neovim:
 -- The following reflects the builtin default configuration.
 --
 require("roarie-commands").setup({
+	border_chars = {
+		'╭', '─', '╮',
+		'│', '─', '│',
+		'╰', '─', '╯',
+		'├', '┤',
+	},
+
 	help_screen = {
 		"<{Esc,C-C}>                             Exit menu mode",
 		"<{S-[a-z],[0-9]}>                       Select and open menu with accelerator",

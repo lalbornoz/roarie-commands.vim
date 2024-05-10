@@ -2,6 +2,7 @@
 -- Copyright (c) 2024 Lucía Andrea Illanes Albornoz <lucia@luciaillanes.de>
 --
 
+local config = require("roarie-menu.config")
 local utils = require("roarie-utils")
 local utils_buffer = require("roarie-utils.buffer")
 local utils_windows = require("roarie-windows.utils")
@@ -296,7 +297,7 @@ M.open = function(col, row, submenu, submenu_win)
 	if submenu.keys == nil then
 		submenu.keys = keys
 	end
-	textlist = utils_buffer.frame(textlist, w, h - 2, nil)
+	textlist = utils_buffer.frame(textlist, w, h - 2, config.border_chars)
 
 	M.close(submenu_win, true)
 
