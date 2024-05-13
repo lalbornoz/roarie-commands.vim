@@ -138,7 +138,7 @@ local function map_items(keys, cmdlist, submenu, textlist)
 			table.insert(textlist, "--")
 		end
 	end
-	return w + 2, y
+	return w + 2, y + 2
 end
 -- }}}
 -- {{{ local function select_item(idx_new, submenu, submenu_win)
