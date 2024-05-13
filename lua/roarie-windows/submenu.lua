@@ -56,8 +56,8 @@ end
 -- }}}
 -- {{{ local maps_default = {}
 local maps_default = {
-	["<Down>"] = select_item_wrap("select_item_step", 1),
-	["<Up>"] = select_item_wrap("select_item_step", -1),
+	["<Down>"] = select_item_wrap("select_item_next"),
+	["<Up>"] = select_item_wrap("select_item_prev"),
 	["<PageDown>"] = select_item_wrap("select_item_after", "--", -1),
 	["<PageUp>"] = select_item_wrap("select_item_after", "--", 1),
 	["<Esc>"] = close_submenu,
@@ -143,10 +143,6 @@ end
 -- }}}
 -- {{{ local function select_item(idx_new, submenu, submenu_win)
 local function select_item(idx_new, submenu, submenu_win)
-	if idx_new == submenu.idx then
-		return
-	end
-
 	submenu.idx = idx_new
 
 	local cmdlist = {"syn clear"}
@@ -353,6 +349,7 @@ end
 -- {{{ M.select_item_after = function(after, step, submenu, submenu_winid)
 M.select_item_after = function(after, step, submenu, submenu_winid)
 	local idx_new = submenu.idx
+
 	if step < 0 then
 		while idx_new < submenu.idx_max do
 			if submenu.items[idx_new].display == after then
@@ -378,6 +375,13 @@ M.select_item_after = function(after, step, submenu, submenu_winid)
 			idx_new = submenu.idx_max
 		end
 	end
+
+	if submenu.items[idx_new].display == "--" then
+		submenu.idx = idx_new
+		M.select_item_after(after, step, submenu, submenu_winid)
+		return
+	end
+
 	select_item(idx_new, submenu, submenu_winid)
 end
 -- }}}
@@ -400,32 +404,51 @@ M.select_item_key = function(ch, submenu, submenu_winid)
 
 end
 -- }}}
--- {{{ M.select_item_step = function(step, submenu, submenu_winid)
-M.select_item_step = function(step, submenu, submenu_winid)
+-- {{{ M.select_item_next = function(submenu, submenu_winid)
+M.select_item_next = function(submenu, submenu_winid)
 	local idx_new = submenu.idx
-	if step < 0 then
-		if submenu.idx == 1 then
-			idx_new = submenu.idx_max
-		else
-			while idx_new > 1 do
-				idx_new = idx_new - 1
-				if submenu.items[idx_new].display ~= "--" then
-					break
-				end
-			end
-		end
-	elseif step > 0 then
-		if submenu.idx == submenu.idx_max then
-			idx_new = 1
-		else
-			while idx_new < submenu.idx_max do
-				idx_new = idx_new + 1
-				if submenu.items[idx_new].display ~= "--" then
-					break
-				end
+
+	if submenu.idx == submenu.idx_max then
+		idx_new = 1
+	else
+		while idx_new < submenu.idx_max do
+			idx_new = idx_new + 1
+			if submenu.items[idx_new].display ~= "--" then
+				break
 			end
 		end
 	end
+
+	if submenu.items[idx_new].display == "--" then
+		submenu.idx = idx_new
+		M.select_item_next(submenu, submenu_winid)
+		return
+	end
+
+	select_item(idx_new, submenu, submenu_winid)
+end
+-- }}}
+-- {{{ M.select_item_prev = function(submenu, submenu_winid)
+M.select_item_prev = function(submenu, submenu_winid)
+	local idx_new = submenu.idx
+
+	if submenu.idx == 1 then
+		idx_new = submenu.idx_max
+	else
+		while idx_new > 1 do
+			idx_new = idx_new - 1
+			if submenu.items[idx_new].display ~= "--" then
+				break
+			end
+		end
+	end
+
+	if submenu.items[idx_new].display == "--" then
+		submenu.idx = idx_new
+		M.select_item_prev(submenu, submenu_winid)
+		return
+	end
+
 	select_item(idx_new, submenu, submenu_winid)
 end
 -- }}}
