@@ -216,7 +216,8 @@ end
 -- {{{ local function setup_window(col, row, submenu, submenu_win, textlist, w, h)
 local function setup_window(col, row, submenu, submenu_win, textlist, w, h)
 	local opts = {
-		col=col, row=row,
+		col=col,
+		row=row,
 		focusable=1,
 		noautocmd=1,
 		relative="editor",
@@ -229,11 +230,14 @@ local function setup_window(col, row, submenu, submenu_win, textlist, w, h)
 	submenu_win.win_prev = vim.api.nvim_get_current_win()
 	submenu_win.bid = utils_buffer.create_scratch("submenu", textlist)
 	submenu_win.winid = vim.api.nvim_open_win(submenu_win.bid, 0, opts)
-	utils.win_execute(submenu_win.winid, cmdlist, false)
 
 	vim.api.nvim_win_set_option(
 		submenu_win.winid, "winhl",
 		"Normal:QuickBG,CursorColumn:QuickBG,CursorLine:QuickBorder")
+
+	local cmdlist = {"hi Cursor blend=0", "set guicursor-=a:Cursor/lCursor"}
+	utils.win_execute(submenu_win.winid, cmdlist, false)
+
 	vim.api.nvim_win_set_option(
 		submenu_win.winid, "cursorline",
 		false)
@@ -275,6 +279,11 @@ M.close = function(submenu_win, redraw)
 		submenu_win.win_prev = nil
 	end
 
+	if vim.o.guicursor ~= submenu_win.guicursor_old then
+		vim.o.guicursor = submenu_win.guicursor_old
+		vim.api.nvim_set_hl(0, "Cursor", submenu_win.hl_cursor_old)
+	end
+
 	submenu_win.open = false
 	return submenu_win
 end
@@ -284,6 +293,8 @@ M.init = function()
 	return {
 		bid=nil,
 		cmdlist={},
+		guicursor_old=vim.o.guicursor,
+		hl_cursor_old=vim.api.nvim_get_hl(0, {name="Cursor"}),
 		idx=nil,
 		idx_max=nil,
 		keys={},
@@ -320,35 +331,8 @@ M.open = function(col, row, submenu, submenu_win)
 	setup_window(col, row, submenu, submenu_win, textlist, w, h)
 	setup_prompt_window(submenu_win, w, h)
 	M.select_item_idx(1, submenu, submenu_win)
-	M.update(submenu)
 
 	setup_maps(M, submenu, submenu_win)
-end
--- }}}
--- {{{ M.update = function(submenu)
-M.update = function(submenu)
-	local cmdlist = {
-		"set nocursorline",
-		"syn clear"}
-
-	for _, item in ipairs(submenu.items) do
-		if item.key_pos >= 0 then
-			local x = item.key_pos + 1
-			table.insert(
-				cmdlist, utils_windows.highlight_region(
-				"QuickKey", 1, x, 1, x + 1, true))
-		end
-	end
-
-	if (submenu.idx >= 1) and (submenu.idx <= #submenu.items) then
-		local x0 = 1
-		local x1 = x0 + submenu.items[submenu.idx].w
-		table.insert(
-			cmdlist, utils_windows.highlight_region(
-			"QuickSel", 1, x0, 1, x1, true))
-	end
-
-	utils.win_execute(submenu.winid, cmdlist, false)
 end
 -- }}}
 
