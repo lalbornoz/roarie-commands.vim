@@ -103,20 +103,9 @@ local function add_key(keys, key_char, item_idx)
 	end
 end
 -- }}}
--- {{{ local function get_dimensions(submenu, w, h)
-local function get_dimensions(submenu, w, h)
-	for _, item in ipairs(submenu.items) do
-		if item.display ~= "--" then
-			w = math.max(w, utils.ulen("│ 󰘳" .. item.display .. " │"))
-		end
-		h = h + 1
-	end
-	return w, h + 1
-end
--- }}}
--- {{{ local function map_items(keys, cmdlist, submenu, textlist, w)
-local function map_items(keys, cmdlist, submenu, textlist, w)
-	local y = 1
+-- {{{ local function map_items(keys, cmdlist, submenu, textlist)
+local function map_items(keys, cmdlist, submenu, textlist)
+	local w, y = 1, 1
 	for item_idx, item in ipairs(submenu.items) do
 		y = y + 1
 		if item.display ~= "--" then
@@ -126,10 +115,12 @@ local function map_items(keys, cmdlist, submenu, textlist, w)
 
 			submenu.items[item_idx].menu_text = display
 			table.insert(textlist, " " .. item.icon .. " " .. display .. " ")
+			w = math.max(w, utils.ulen(textlist[#textlist]))
 		else
 			table.insert(textlist, "--")
 		end
 	end
+	return w + 2, y
 end
 -- }}}
 -- {{{ local function select_item(idx_new, submenu, submenu_win)
@@ -289,15 +280,14 @@ M.open = function(col, row, submenu, submenu_win)
 	local keys = {}
 	local w, h = 4, 2
 
-	w, h = get_dimensions(submenu, w, h)
+	w, h = map_items(keys, cmdlist, submenu, textlist)
+	textlist = utils_buffer.frame(textlist, w, h - 2, config.border_chars)
 	if col == -1 then col = (vim.o.columns - w) / 2 end
 	if row == -1 then row = (vim.o.lines - h) / 2 end
 
-	map_items(keys, cmdlist, submenu, textlist, w)
 	if submenu.keys == nil then
 		submenu.keys = keys
 	end
-	textlist = utils_buffer.frame(textlist, w, h - 2, config.border_chars)
 
 	M.close(submenu_win, true)
 
