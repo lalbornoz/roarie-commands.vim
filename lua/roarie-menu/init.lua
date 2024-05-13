@@ -283,8 +283,8 @@ M.AddSubMenu = function(id, title, ignore_in_palette)
 	}
 end
 -- }}}
--- {{{ M.AddSubMenuItem = function(id, icon, title, rhs)
-M.AddSubMenuItem = function(id, icon, title, rhs)
+-- {{{ M.AddSubMenuItem = function(id, icon, title, rhs, fn_display, fn_rhs)
+M.AddSubMenuItem = function(id, icon, title, rhs, fn_display, fn_rhs)
 	local display = title:gsub("&", "")
 	local key_pos = vim.fn.match(title, "&")
 	local key_char = nil
@@ -297,8 +297,21 @@ M.AddSubMenuItem = function(id, icon, title, rhs)
 	submenus[id].idx_max = submenus[id].idx_max + 1
 	submenus[id].w = math.max(submenus[id].w, utils.ulen(icon .. " " .. display) + 2 + 2)
 
+	if (fn_display ~= nil) and (fn_display ~= "") then
+		fn_display = loadstring(fn_display)
+	else
+		fn_display = nil
+	end
+	if (fn_rhs ~= nil) and (fn_rhs ~= "") then
+		fn_rhs = loadstring(fn_rhs)
+	else
+		fn_rhs = nil
+	end
+
 	table.insert(submenus[id].items, {
 		display=title,
+		fn_display=fn_display,
+		fn_rhs=fn_rhs,
 		icon=icon,
 		key_char=key_char, key_pos=key_pos,
 		term=term,

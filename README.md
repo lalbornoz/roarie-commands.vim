@@ -119,6 +119,14 @@ call roarie_commands#AddSubMenuItem("git_submenu", " ", "&Browse in web front-en
 call roarie_commands#AddSubMenuItem("git_submenu", " ", "&Record changes to the repository", ":Git commit")
 
 "
+" Adds a submenu with a submenu item with title and rhs returned by a
+" Lua function.
+"
+call roarie_commands#AddSubMenu("build_submenu", "Build submenu")
+call roarie_commands#AddSubMenuItem("build_submenu", " ", "Set &default build arguments...", ":BuildMeEditArgs ")
+call roarie_commands#AddSubMenuItem("build_submenu", " ", "Current:                      ", ":BuildMeEditArgs ", 'return "Current: " .. (require("buildme").getargsbuild() or "")', 'return ":BuildMeEditArgs " .. (require("buildme").getargsbuild() or "")')
+
+"
 " If desired, menus encompassing all mappings that are mapped by
 " a function key with optional modifiers (e.g. <F2>, <S-F9>) can
 " be automatically added. In this case, two menus, "<F1-7>" and

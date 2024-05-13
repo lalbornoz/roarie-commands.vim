@@ -110,6 +110,16 @@ local function map_items(keys, cmdlist, submenu, textlist)
 		y = y + 1
 		if item.display ~= "--" then
 			local display = item.display
+			if item.fn_display ~= nil then
+				display = item.fn_display()
+				if utils.ulen(display) > utils.ulen(item.display) then
+					display = display:sub(1, utils.ulen(item.display))
+					display = display:sub(1, #display - 2) .. ".."
+				end
+			end
+			if item.fn_rhs ~= nil then
+				item.rhs = item.fn_rhs()
+			end
 			display, key_char = utils_windows.highlight_accel(cmdlist, display, y, 2)
 			add_key(keys, key_char, item_idx)
 
