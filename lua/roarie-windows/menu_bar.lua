@@ -288,6 +288,14 @@ local function setup_window(menu_win)
 			M.update(menu_win)
 		end,
 	})
+
+	vim.api.nvim_create_autocmd({"WinLeave"}, {
+		buffer=menu_win.bid,
+		callback=function(ev)
+			vim.cmd [[hi Cursor blend=0]]
+			vim.cmd [[set guicursor-=a:Cursor/lCursor]]
+		end,
+	})
 end
 -- }}}
 
