@@ -259,7 +259,7 @@ local function setup_menus(menu, menus, help_text)
 	menu.size = #menu.items
 end
 -- }}}
--- {{{ local function setup_window()
+-- {{{ local function setup_window(menu)
 local function setup_window(menu)
 	local opts = {
 		col=0, row=0,
@@ -278,6 +278,13 @@ local function setup_window(menu)
 	vim.api.nvim_win_set_option(
 		menu.winid, "winhl",
 		"Normal:QuickBG,CursorColumn:QuickBG,CursorLine:QuickBG")
+
+	vim.api.nvim_create_autocmd({"WinEnter"}, {
+		buffer=menu.bid,
+		callback=function(ev)
+			M.update(menu)
+		end,
+	})
 end
 -- }}}
 
@@ -325,15 +332,15 @@ M.init = function(menus, help_text, menu_popup)
 	return menu
 end
 -- }}}
--- {{{ M.update = function(menus)
-M.update = function(menus)
+-- {{{ M.update = function(menu)
+M.update = function(menu)
 	local cmdlist = {
 		"hi Cursor blend=100",
 		"set guicursor+=a:Cursor/lCursor",
 		"set nocursorline",
 		"syn clear"}
 
-	for _, item in ipairs(menus.items) do
+	for _, item in ipairs(menu.items) do
 		if item.key_pos >= 0 then
 			local x = item.key_pos + item.x + 1
 			table.insert(
@@ -342,15 +349,15 @@ M.update = function(menus)
 		end
 	end
 
-	if (menus.idx >= 1) and (menus.idx <= menus.size) then
-		local x0 = menus.items[menus.idx].x + 1
-		local x1 = x0 + menus.items[menus.idx].w
+	if (menu.idx >= 1) and (menu.idx <= menu.size) then
+		local x0 = menu.items[menu.idx].x + 1
+		local x1 = x0 + menu.items[menu.idx].w
 		table.insert(
 			cmdlist, utils_windows.highlight_region(
 			"QuickSel", 1, x0, 1, x1, true))
 	end
 
-	utils.win_execute(menus.winid, cmdlist, false)
+	utils.win_execute(menu.winid, cmdlist, false)
 end
 -- }}}
 
