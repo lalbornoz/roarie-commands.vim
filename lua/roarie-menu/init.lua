@@ -19,6 +19,7 @@ local config_defaults = {
 		"<{Space,Enter}>                         In menu: activate menu item",
 		"<M-[a-z]>, <{Page,}{Down,Up}>           In submenu: select item with accelerator",
 		"<Enter>                                 In submenu: execute prompt",
+		"<Tab>                                   In submenu: complete ex command",
 	},
 	help_text = "Press   for help",
 

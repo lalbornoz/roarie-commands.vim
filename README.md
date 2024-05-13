@@ -43,6 +43,7 @@ require("roarie-commands").setup({
 		"<{Space,Enter}>                         In menu: activate menu item",
 		"<M-[a-z]>, <{Page,}{Down,Up}>           In submenu: select item with accelerator",
 		"<Enter>                                 In submenu: execute prompt",
+		"<Tab>                                   In submenu: complete ex command",
 	},
 	help_text = "Press ? for help",
 
@@ -119,8 +120,8 @@ call roarie_commands#AddSubMenuItem("git_submenu", " ", "&Browse in web front-en
 call roarie_commands#AddSubMenuItem("git_submenu", " ", "&Record changes to the repository", ":Git commit")
 
 "
-" Adds a submenu with a submenu item with title and rhs returned by a
-" Lua function.
+" Adds a submenu with a dynamic submenu item: the item title and rhs
+" are supplied by a Lua function.
 "
 call roarie_commands#AddSubMenu("build_submenu", "Build submenu")
 call roarie_commands#AddSubMenuItem("build_submenu", " ", "Set &default build arguments...", ":BuildMeEditArgs ")
@@ -148,5 +149,31 @@ call roarie_commands#OpenMenu()
 ```
 
 Please refer to `autoload/roarie_commands.vim` for the full API.
+
+## Default keymaps in menu
+
+| Mapping                  | Description                                                   |
+| ------------------------ | ------------------------------------------------------------- |
+| ``<Esc>, <C-C>``         | Exit menu mode                                                |
+| ``<S-[a-z]>, [0-9]``     | Select and open menu with accelerator                         |
+| ``<Left>, <Right>``      | Select menu; will open menu automatically if menu is not open |
+| ``<Down>, <Space>``      | Open menu if menu is not open                                 |
+| ``<M-[a-z]>``            | In menu: select item with accelerator                         |
+| ``<Down>, <Up>``         | In menu: select item                                          |
+| ``<PageDown>, <PageUp>`` | In menu: scroll to previous/next item group                   |
+| ``<Home>, <End>``        | In menu: go to first/last item                                |
+| ``<Space>, <Enter>``     | In menu: activate selected item                               |
+| ``?``                    | Toggle help screen                                            |
+
+## Default keymaps in submenu
+
+| Mapping                  | Description                        |
+| ------------------------ | ---------------------------------- |
+| ``<Esc>, <C-C>``         | Exit submenu                       |
+| ``<M-[a-z]>``            | Select item with accelerator       |
+| ``<Down>, <Up>``         | Select item                        |
+| ``<PageDown>, <PageUp>`` | Scroll to previous/next item group |
+| ``<Enter>``              | Activate selected item             |
+| ``<Tab>``                | Complete Ex command                |
 
 [modeline]: # ( vim: set tw=0: )
