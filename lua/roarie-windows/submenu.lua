@@ -226,6 +226,7 @@ local function setup_window(col, row, submenu, submenu_win, textlist, w, h)
 		zindex=50,
 	}
 
+	submenu_win.win_prev = vim.api.nvim_get_current_win()
 	submenu_win.bid = utils_buffer.create_scratch("submenu", textlist)
 	submenu_win.winid = vim.api.nvim_open_win(submenu_win.bid, 0, opts)
 	utils.win_execute(submenu_win.winid, cmdlist, false)
@@ -267,6 +268,11 @@ M.close = function(submenu_win, redraw)
 
 	if redraw and should_redraw then
 		vim.cmd [[redraw]]
+	end
+
+	if submenu_win.win_prev ~= nil then
+		vim.api.nvim_set_current_win(submenu_win.win_prev)
+		submenu_win.win_prev = nil
 	end
 
 	submenu_win.open = false
