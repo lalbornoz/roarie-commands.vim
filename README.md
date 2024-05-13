@@ -5,7 +5,10 @@ mappings/commands and a menu UI akin to Turbo Pascal, etc. as well as
 an optional [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 command palette picker. Both Neovim, with [utf8.nvim](https://github.com/uga-rosa/utf8.nvim)
 as dependency, as well as Vim, with [vim-quickui](https://github.com/skywind3000/vim-quickui)
-as dependency, are supported.
+as dependency, are supported.  
+  
+Originally based on and inspired by the [vim-quickui](https://github.com/skywind3000/vim-quickui)
+Vim plugin.
 
 ## Demo: Menu UI
 ![Menu UI](https://github.com/lalbornoz/roarie-commands.vim/blob/master/Screenshot1.png?raw=true)
