@@ -13,7 +13,7 @@ as dependency, are supported.
 ## Demo: Telescope command palette picker
 ![Telescope command palette picker](https://github.com/lalbornoz/roarie-commands.vim/blob/master/Screenshot2.png?raw=true)
 
-## Demo: Submenu UI w/ editable prompt
+## Demo: Submenu UI with editable prompt and dynamic items
 ![Submenu UI w/ editable prompt](https://github.com/lalbornoz/roarie-commands.vim/blob/master/Screenshot3.png?raw=true)
 
 # Installation
