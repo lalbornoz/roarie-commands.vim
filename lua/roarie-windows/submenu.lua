@@ -25,6 +25,13 @@ local function close_submenu(M, submenu, submenu_win)
 	end
 end
 -- }}}
+-- {{{ local function complete(M, submenu, submenu_win)
+local function complete(M, submenu, submenu_win)
+	return function()
+		vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<C-X><C-V>", true, true, true))
+	end
+end
+-- }}}
 -- {{{ local function select_item_key(key_char)
 local function select_item_key(key_char)
 	return function(M, submenu, submenu_win)
@@ -56,6 +63,7 @@ local maps_default = {
 	["<Esc>"] = close_submenu,
 	["<C-c>"] = close_submenu,
 	["<CR>"] = activate_item,
+	["<Tab>"] = complete,
 
 	-- {{{ ["<M-a>"]...["<M-z>"] = select_item_key(...)
 	["<M-a>"] = select_item_key("a"),
