@@ -13,17 +13,17 @@ local M = {}
 
 -- {{{ local function forward_to_popup_menu(lhs)
 local function forward_to_popup_menu(lhs)
-	return function(M, menu, menu_popup)
+	return function(M, menu_popup, menu_win)
 		return function ()
 			local rc = nil
 			if menu_popup.open then
 				vim.api.nvim_set_current_win(menu_popup.winid)
 				vim.api.nvim_set_current_buf(menu_popup.bid)
-				rc = menu_popup.maps[lhs](M, menu_popup, menu)()
-				if menu.winid ~= nil then
-					vim.api.nvim_set_current_win(menu.winid)
-					vim.api.nvim_set_current_buf(menu.bid)
-					M.update(menu, false)
+				rc = menu_popup.maps[lhs](M, menu_popup, menu_win)()
+				if menu_win.winid ~= nil then
+					vim.api.nvim_set_current_win(menu_win.winid)
+					vim.api.nvim_set_current_buf(menu_win.bid)
+					M.update(menu_win)
 				end
 			end
 			return rc
@@ -33,32 +33,34 @@ end
 -- }}}
 -- {{{ local function activate_item(key)
 local function activate_item(key)
-	return function(M, menu, menu_popup)
+	return function(M, menu_popup, menu_win)
 		return function()
-			local lhs = forward_to_popup_menu(key)(M, menu, menu_popup)()
+			local lhs = forward_to_popup_menu(key)(M, menu_popup, menu_win)()
 			utils_popup_menu.close(menu_popup, true)
-			M.close(menu)
+			M.close(menu_win)
 			vim.cmd [[redraw]]
 			vim.fn.feedkeys(vim.api.nvim_replace_termcodes(lhs, true, true, true))
 		end
 	end
 end
 -- }}}
--- {{{ local function close_menu(M, menu, menu_popup)
-local function close_menu(M, menu, menu_popup)
+-- {{{ local function close_menu(M, menu_popup, menu_win)
+local function close_menu(M, menu_popup, menu_win)
 	return function()
-		utils_popup_menu.close(menu_popup, true); M.close(menu); vim.cmd [[redraw]]
+		utils_popup_menu.close(menu_popup, true)
+		M.close(menu_win)
+		vim.cmd [[redraw]]
 	end
 end
 -- }}}
 -- {{{ local function either(expr, if_true, if_false)
 local function either(expr, if_true, if_false)
-	return function(M, menu, menu_popup)
+	return function(M, menu_popup, menu_win)
 		return function()
 			if expr(menu_popup) then
-				return if_true(M, menu, menu_popup)()
+				return if_true(M, menu_popup, menu_win)()
 			else
-				return if_false(M, menu, menu_popup)()
+				return if_false(M, menu_popup, menu_win)()
 			end
 		end
 	end
@@ -66,13 +68,13 @@ end
 -- }}}
 -- {{{ local function open_menu(key)
 local function open_menu(key)
-	return function(M, menu, menu_popup)
+	return function(M, menu_popup, menu_win)
 		return function()
 			if not menu_popup.open then
-				utils_popup_menu.open(menu, menu_popup, nil)
-				M.update(menu, false)
+				utils_popup_menu.open(menu_win, menu_popup, nil)
+				M.update(menu_win, false)
 			else
-				forward_to_popup_menu(key)(M, menu, menu_popup)()
+				forward_to_popup_menu(key)(M, menu_popup, menu_win)()
 			end
 		end
 	end
@@ -80,44 +82,45 @@ end
 -- }}}
 -- {{{ local function select_menu_dir(dir)
 local function select_menu_dir(dir)
-	return function(M, menu, menu_popup)
+	return function(M, menu_popup, menu_win)
 		return function()
 			if dir < 0 then
-				if menu.idx > 1 then
-					menu.idx = menu.idx - 1
+				if menu_win.idx > 1 then
+					menu_win.idx = menu_win.idx - 1
 				else
-					menu.idx = menu.size
+					menu_win.idx = menu_win.size
 				end
 			elseif dir > 0 then
-				if menu.idx < menu.size then
-					menu.idx = menu.idx + 1
+				if menu_win.idx < menu_win.size then
+					menu_win.idx = menu_win.idx + 1
 				else
-					menu.idx = 1
+					menu_win.idx = 1
 				end
 			end
 			if menu_popup.open then
 				utils_popup_menu.close(menu_popup, false)
-				utils_popup_menu.open(menu, menu_popup, nil)
+				utils_popup_menu.open(menu_win, menu_popup, nil)
 			end
-			M.update(menu)
+			M.update(menu_win)
 		end
 	end
 end
 -- }}}
 -- {{{ local function select_menu_key(key_char)
 local function select_menu_key(key_char)
-	return function(M, menu, menu_popup)
+	return function(M, menu_popup, menu_win)
 		return function()
-			utils_popup_menu.open(menu, menu_popup, string.lower(key_char), false)
-			M.update(menu, false)
+			utils_popup_menu.open(menu_win, menu_popup, string.lower(key_char), false)
+			M.update(menu_win)
 		end
 	end
 end
 -- }}}
--- {{{ local function toggle_help(M, menu, menu_popup)
-local function toggle_help(M, menu, menu_popup)
+-- {{{ local function toggle_help(M, menu_popup, menu_win)
+local function toggle_help(M, menu_popup, menu_win)
 	return function()
-		utils_help_screen.toggle(config.help_screen, menu_popup, false); M.update(menu)
+		utils_help_screen.toggle(config.help_screen, menu_popup, false)
+		M.update(menu_win)
 	end
 end
 -- }}}
@@ -209,43 +212,43 @@ local maps_default = {
 -- }}}
 
 
--- {{{ local function setup_help(help_text, menu)
-local function setup_help(help_text, menu)
+-- {{{ local function setup_help(help_text, menu_win)
+local function setup_help(help_text, menu_win)
 	if help_text ~= nil then
-		menu.text = menu.text
-			 .. string.rep(" ", (vim.o.columns - utils.ulen(menu.text .. help_text .. " ")))
-			 .. help_text
+		menu_win.text = menu_win.text
+			     .. string.rep(" ", (vim.o.columns - utils.ulen(menu_win.text .. help_text .. " ")))
+			     .. help_text
 	end
 end
 -- }}}
--- {{{ local function setup_maps(M, menu, menu_popup)
-local function setup_maps(M, menu, menu_popup)
-	menu.maps = {}
+-- {{{ local function setup_maps(M, menu_popup, menu_win)
+local function setup_maps(M, menu_popup, menu_win)
+	menu_win.maps = {}
 	for lhs, rhs in pairs(maps_default) do
 		vim.keymap.set(
-			{"n", "i"}, lhs, rhs(M, menu, menu_popup),
-			{buffer=menu.bid, noremap=true})
-		menu.maps[lhs] = rhs
+			{"n", "i"}, lhs, rhs(M, menu_popup, menu_win),
+			{buffer=menu_win.bid, noremap=true})
+		menu_win.maps[lhs] = rhs
 	end
 end
 -- }}}
--- {{{ local function setup_menus(menu, menus, help_text)
-local function setup_menus(menu, menus, help_text)
+-- {{{ local function setup_menus(commands, menu_win)
+local function setup_menus(commands, menu_win)
 	order_fn = function(t, a, b)
 		return b > a
 	end
 
 	local x = 0
-	for priority, menu_ in utils.spairs(menus, order_fn) do
+	for priority, menu_win_ in utils.spairs(commands, order_fn) do
 		local _, key_char, key_pos =
 			utils_windows.highlight_accel(
-				nil, menu_.name, -1, 1)
-		local name = menu_.name:gsub("&", "")
+				nil, menu_win_.name, -1, 1)
+		local name = menu_win_.name:gsub("&", "")
 		local w = utils.ulen(name) + 2
 
-		menu.text = menu.text .. " " .. name .. " " .. "  "
-		table.insert(menu.items, {
-			items=menu_.items,
+		menu_win.text = menu_win.text .. " " .. name .. " " .. "  "
+		table.insert(menu_win.items, {
+			items=menu_win_.items,
 			key_char=key_char,
 			key_pos=key_pos,
 			name=name,
@@ -256,11 +259,11 @@ local function setup_menus(menu, menus, help_text)
 
 		x = x + w + 2
 	end
-	menu.size = #menu.items
+	menu_win.size = #menu_win.items
 end
 -- }}}
--- {{{ local function setup_window(menu)
-local function setup_window(menu)
+-- {{{ local function setup_window(menu_win)
+local function setup_window(menu_win)
 	local opts = {
 		col=0, row=0,
 		focusable=1,
@@ -271,47 +274,47 @@ local function setup_window(menu)
 		height=1,
 	}
 
-	menu.bid = utils_buffer.create_scratch("menu", menu.text)
-	menu.winid = vim.api.nvim_open_win(menu.bid, 0, opts)
-	vim.api.nvim_set_current_win(menu.winid)
-	vim.api.nvim_set_current_buf(menu.bid)
+	menu_win.bid = utils_buffer.create_scratch("menu_win", menu_win.text)
+	menu_win.winid = vim.api.nvim_open_win(menu_win.bid, 0, opts)
+	vim.api.nvim_set_current_win(menu_win.winid)
+	vim.api.nvim_set_current_buf(menu_win.bid)
 	vim.api.nvim_win_set_option(
-		menu.winid, "winhl",
+		menu_win.winid, "winhl",
 		"Normal:QuickBG,CursorColumn:QuickBG,CursorLine:QuickBG")
 
 	vim.api.nvim_create_autocmd({"WinEnter"}, {
-		buffer=menu.bid,
+		buffer=menu_win.bid,
 		callback=function(ev)
-			M.update(menu)
+			M.update(menu_win)
 		end,
 	})
 end
 -- }}}
 
 
--- {{{ M.close = function(menu)
-M.close = function(menu)
+-- {{{ M.close = function(menu_win)
+M.close = function(menu_win)
 	utils_help_screen.close()
 
-	if menu.winid ~= nil then
-		vim.api.nvim_win_close(menu.winid, 0)
-		menu.winid = nil
+	if menu_win.winid ~= nil then
+		vim.api.nvim_win_close(menu_win.winid, 0)
+		menu_win.winid = nil
 	end
 
-	if menu.bid ~= nil then
-		utils_buffer.free(menu.bid, "menu")
-		menu.bid = nil
+	if menu_win.bid ~= nil then
+		utils_buffer.free(menu_win.bid, "menu_win")
+		menu_win.bid = nil
 	end
 
-	if vim.o.guicursor ~= menu.guicursor_old then
-		vim.o.guicursor = menu.guicursor_old
-		vim.api.nvim_set_hl(0, "Cursor", menu.hl_cursor_old)
+	if vim.o.guicursor ~= menu_win.guicursor_old then
+		vim.o.guicursor = menu_win.guicursor_old
+		vim.api.nvim_set_hl(0, "Cursor", menu_win.hl_cursor_old)
 	end
 end
 -- }}}
--- {{{ M.init = function(menus, help_text, menu_popup)
-M.init = function(menus, help_text, menu_popup)
-	local menu = {
+-- {{{ M.init = function(commands, help_text, menu_popup)
+M.init = function(commands, help_text, menu_popup)
+	local menu_win = {
 		bid=nil,
 		guicursor_old=vim.o.guicursor,
 		hl_cursor_old=vim.api.nvim_get_hl(0, {name="Cursor"}),
@@ -323,24 +326,24 @@ M.init = function(menus, help_text, menu_popup)
 		winid=nil,
 	}
 
-	setup_menus(menu, menus)
-	setup_help(help_text, menu)
-	setup_window(menu)
-	setup_maps(M, menu, menu_popup)
-	M.update(menu)
+	setup_menus(commands, menu_win)
+	setup_help(help_text, menu_win)
+	setup_window(menu_win)
+	setup_maps(M, menu_popup, menu_win)
+	M.update(menu_win)
 
-	return menu
+	return menu_win
 end
 -- }}}
--- {{{ M.update = function(menu)
-M.update = function(menu)
+-- {{{ M.update = function(menu_win)
+M.update = function(menu_win)
 	local cmdlist = {
 		"hi Cursor blend=100",
 		"set guicursor+=a:Cursor/lCursor",
 		"set nocursorline",
 		"syn clear"}
 
-	for _, item in ipairs(menu.items) do
+	for _, item in ipairs(menu_win.items) do
 		if item.key_pos >= 0 then
 			local x = item.key_pos + item.x + 1
 			table.insert(
@@ -349,15 +352,15 @@ M.update = function(menu)
 		end
 	end
 
-	if (menu.idx >= 1) and (menu.idx <= menu.size) then
-		local x0 = menu.items[menu.idx].x + 1
-		local x1 = x0 + menu.items[menu.idx].w
+	if (menu_win.idx >= 1) and (menu_win.idx <= menu_win.size) then
+		local x0 = menu_win.items[menu_win.idx].x + 1
+		local x1 = x0 + menu_win.items[menu_win.idx].w
 		table.insert(
 			cmdlist, utils_windows.highlight_region(
 			"QuickSel", 1, x0, 1, x1, true))
 	end
 
-	utils.win_execute(menu.winid, cmdlist, false)
+	utils.win_execute(menu_win.winid, cmdlist, false)
 end
 -- }}}
 

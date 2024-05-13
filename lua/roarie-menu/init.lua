@@ -375,13 +375,12 @@ end
 -- }}}
 -- {{{ M.OpenSubMenu = function(id)
 M.OpenSubMenu = function(id)
-	local submenu_win = utils_submenu.init()
 	if #submenus[id].items > 0 then
 		if submenus[id].items[#submenus[id].items].display ~= "--" then
 			M.AddSubMenuItem(id, " ", "--", "")
 		end
 	end
-	utils_submenu.open(-1, -1, submenus[id], submenu_win)
+	utils_submenu.open(-1, -1, submenus[id])
 end
 -- }}}
 

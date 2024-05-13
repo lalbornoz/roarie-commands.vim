@@ -288,9 +288,9 @@ M.close = function(submenu_win, redraw)
 	return submenu_win
 end
 -- }}}
--- {{{ M.init = function()
-M.init = function()
-	return {
+-- {{{ M.open = function(col, row, submenu)
+M.open = function(col, row, submenu)
+	local submenu_win = {
 		bid=nil,
 		cmdlist={},
 		guicursor_old=vim.o.guicursor,
@@ -303,10 +303,7 @@ M.init = function()
 		w=nil,
 		h=nil,
 	}
-end
--- }}}
--- {{{ M.open = function(col, row, submenu, submenu_win)
-M.open = function(col, row, submenu, submenu_win)
+
 	local cmdlist, textlist = {"syn clear"}, {}
 	local keys = {}
 	local w, h = 4, 2
@@ -315,11 +312,7 @@ M.open = function(col, row, submenu, submenu_win)
 	textlist = utils_buffer.frame(textlist, w, h - 2, config.border_chars)
 	if col == -1 then col = (vim.o.columns - w) / 2 end
 	if row == -1 then row = (vim.o.lines - h) / 2 end
-
-	if submenu.keys == nil then
-		submenu.keys = keys
-	end
-
+	if submenu.keys == nil then submenu.keys = keys end
 	M.close(submenu_win, true)
 
 	submenu_win.cmdlist = cmdlist
@@ -331,8 +324,9 @@ M.open = function(col, row, submenu, submenu_win)
 	setup_window(col, row, submenu, submenu_win, textlist, w, h)
 	setup_prompt_window(submenu_win, w, h)
 	M.select_item_idx(1, submenu, submenu_win)
-
 	setup_maps(M, submenu, submenu_win)
+
+	return submenu, submenu_win
 end
 -- }}}
 
