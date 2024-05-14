@@ -73,6 +73,125 @@ M.highlight_region = function(name, srow, scol, erow, ecol, virtual)
 end
 -- }}}
 
+-- {{{ M.select_item_after = function(after, step, idx, idx_max, items, select_item_fn, ...)
+M.select_item_after = function(after, step, idx, idx_max, items, select_item_fn, ...)
+	local args = {...}
+	local idx_new = idx
+
+	if step < 0 then
+		while idx_new < idx_max do
+			if items[idx_new].display == after then
+				idx_new = idx_new + 1
+				break
+			else
+				idx_new = idx_new + 1
+			end
+		end
+		if idx_new == idx_max then
+			idx_new = 1
+		end
+	elseif step > 0 then
+		while idx_new > 1 do
+			if items[idx_new].display == after then
+				idx_new = idx_new - 1
+				break
+			else
+				idx_new = idx_new - 1
+			end
+		end
+		if idx_new == 1 then
+			idx_new = idx_max
+		end
+	end
+
+	if items[idx_new].display == "--" then
+		M.select_item_after(after, step, idx_new, idx_max, items, select_item_fn, unpack(args))
+		return
+	end
+
+	table.insert(args, 1, idx_new)
+	select_item_fn(unpack(args))
+end
+-- }}}
+-- {{{ M.select_item_idx = function(idx_new, idx, idx_max, items, select_item_fn, ...)
+M.select_item_idx = function(idx_new, idx, idx_max, items, select_item_fn, ...)
+	local args = {...}
+	if idx_new == -1 then
+		idx_new = idx_max
+	end
+
+	table.insert(args, 1, idx_new)
+	select_item_fn(unpack(args))
+end
+-- }}}
+-- {{{ M.select_item_key = function(ch, idx, idx_max, items, select_item_fn, ...)
+M.select_item_key = function(ch, idx, idx_max, keys, items, select_item_fn, ...)
+	local args = {...}
+	local idx_new, key = idx, keys[ch]
+
+	if key ~= nil then
+		if type(key) == "table" then
+			idx_new = utils.array_next(key, idx)
+		else
+			idx_new = keys[ch]
+		end
+	end
+
+	table.insert(args, 1, idx_new)
+	select_item_fn(unpack(args))
+end
+-- }}}
+-- {{{ M.select_item_next = function(idx, idx_max, items, select_item_fn, ...)
+M.select_item_next = function(idx, idx_max, items, select_item_fn, ...)
+	local args = {...}
+	local idx_new = idx
+
+	if idx == idx_max then
+		idx_new = 1
+	else
+		while idx_new < idx_max do
+			idx_new = idx_new + 1
+			if items[idx_new].title ~= "--" then
+				break
+			end
+		end
+	end
+
+	if items[idx_new].display == "--" then
+		M.select_item_next(idx_new, idx_max, items, select_item_fn, unpack(args))
+		return
+	end
+
+	table.insert(args, 1, idx_new)
+	select_item_fn(unpack(args))
+end
+-- }}}
+-- {{{ M.select_item_prev = function(idx, idx_max, items, select_item_fn, ...)
+M.select_item_prev = function(idx, idx_max, items, select_item_fn, ...)
+	local args = {...}
+	local idx_new = idx
+
+	if idx == 1 then
+		idx_new = idx_max
+	else
+		while idx_new > 1 do
+			idx_new = idx_new - 1
+			if items[idx_new].title ~= "--" then
+				break
+			end
+		end
+	end
+
+	if items[idx_new].display == "--" then
+		M.select_item_prev(idx_new, idx_max, items, select_item_fn, unpack(args))
+		return
+	end
+
+	table.insert(args, 1, idx_new)
+	select_item_fn(unpack(args))
+end
+-- }}}
+
 return M
 
 -- vim:filetype=lua noexpandtab sw=8 ts=8 tw=0

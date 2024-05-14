@@ -296,7 +296,6 @@ M.open = function(col, row, submenu)
 		guicursor_old=vim.o.guicursor,
 		hl_cursor_old=vim.api.nvim_get_hl(0, {name="Cursor"}),
 		idx=nil,
-		idx_max=nil,
 		keys={},
 		open=nil,
 		winid=nil,
@@ -330,110 +329,47 @@ M.open = function(col, row, submenu)
 end
 -- }}}
 
--- {{{ M.select_item_after = function(after, step, submenu, submenu_winid)
-M.select_item_after = function(after, step, submenu, submenu_winid)
-	local idx_new = submenu.idx
-
-	if step < 0 then
-		while idx_new < submenu.idx_max do
-			if submenu.items[idx_new].display == after then
-				idx_new = idx_new + 1
-				break
-			else
-				idx_new = idx_new + 1
-			end
-		end
-		if idx_new == submenu.idx_max then
-			idx_new = 1
-		end
-	elseif step > 0 then
-		while idx_new > 1 do
-			if submenu.items[idx_new].display == after then
-				idx_new = idx_new - 1
-				break
-			else
-				idx_new = idx_new - 1
-			end
-		end
-		if idx_new == 1 then
-			idx_new = submenu.idx_max
-		end
-	end
-
-	if submenu.items[idx_new].display == "--" then
-		submenu.idx = idx_new
-		M.select_item_after(after, step, submenu, submenu_winid)
-		return
-	end
-
-	select_item(idx_new, submenu, submenu_winid)
+-- {{{ M.select_item_after = function(after, step, submenu, submenu_win)
+M.select_item_after = function(after, step, submenu, submenu_win)
+	return utils_windows.select_item_after(
+		after, step,
+		submenu.idx, submenu.idx_max,
+		submenu.items,
+		select_item, submenu, submenu_win)
 end
 -- }}}
--- {{{ M.select_item_idx = function(idx_new, submenu, submenu_winid)
-M.select_item_idx = function(idx_new, submenu, submenu_winid)
-	select_item(idx_new, submenu, submenu_winid)
+-- {{{ M.select_item_idx = function(idx_new, submenu, submenu_win)
+M.select_item_idx = function(idx_new, submenu, submenu_win)
+	return utils_windows.select_item_idx(
+		idx_new,
+		submenu.idx, submenu.idx_max,
+		submenu.items,
+		select_item, submenu, submenu_win)
 end
 -- }}}
--- {{{ M.select_item_key = function(ch, submenu, submenu_winid)
-M.select_item_key = function(ch, submenu, submenu_winid)
-	local idx_new, key = submenu.idx, submenu.keys[ch]
-	if key ~= nil then
-		if type(key) == "table" then
-			idx_new = utils.array_next(key, submenu.idx)
-		else
-			idx_new = submenu.keys[ch]
-		end
-	end
-	select_item(idx_new, submenu, submenu_winid)
-
+-- {{{ M.select_item_key = function(submenu, submenu_win)
+M.select_item_key = function(ch, submenu, submenu_win)
+	return utils_windows.select_item_key(
+		ch,
+		submenu.idx, submenu.idx_max,
+		submenu_win.keys, submenu.items,
+		select_item, submenu, submenu_win)
 end
 -- }}}
--- {{{ M.select_item_next = function(submenu, submenu_winid)
-M.select_item_next = function(submenu, submenu_winid)
-	local idx_new = submenu.idx
-
-	if submenu.idx == submenu.idx_max then
-		idx_new = 1
-	else
-		while idx_new < submenu.idx_max do
-			idx_new = idx_new + 1
-			if submenu.items[idx_new].display ~= "--" then
-				break
-			end
-		end
-	end
-
-	if submenu.items[idx_new].display == "--" then
-		submenu.idx = idx_new
-		M.select_item_next(submenu, submenu_winid)
-		return
-	end
-
-	select_item(idx_new, submenu, submenu_winid)
+-- {{{ M.select_item_next = function(submenu, submenu_win)
+M.select_item_next = function(submenu, submenu_win)
+	return utils_windows.select_item_next(
+		submenu.idx, submenu.idx_max,
+		submenu.items,
+		select_item, submenu, submenu_win)
 end
 -- }}}
--- {{{ M.select_item_prev = function(submenu, submenu_winid)
-M.select_item_prev = function(submenu, submenu_winid)
-	local idx_new = submenu.idx
-
-	if submenu.idx == 1 then
-		idx_new = submenu.idx_max
-	else
-		while idx_new > 1 do
-			idx_new = idx_new - 1
-			if submenu.items[idx_new].display ~= "--" then
-				break
-			end
-		end
-	end
-
-	if submenu.items[idx_new].display == "--" then
-		submenu.idx = idx_new
-		M.select_item_prev(submenu, submenu_winid)
-		return
-	end
-
-	select_item(idx_new, submenu, submenu_winid)
+-- {{{ M.select_item_prev = function(submenu, submenu_win)
+M.select_item_prev = function(submenu, submenu_win)
+	return utils_windows.select_item_prev(
+		submenu.idx, submenu.idx_max,
+		submenu.items,
+		select_item, submenu, submenu_win)
 end
 -- }}}
 

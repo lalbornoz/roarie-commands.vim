@@ -320,8 +320,8 @@ M.close = function(menu_win)
 	end
 end
 -- }}}
--- {{{ M.init = function(commands, help_text, menu_popup)
-M.init = function(commands, help_text, menu_popup)
+-- {{{ M.open = function(commands, help_text)
+M.open = function(commands, help_text)
 	local menu_win = {
 		bid=nil,
 		guicursor_old=vim.o.guicursor,
@@ -333,6 +333,8 @@ M.init = function(commands, help_text, menu_popup)
 		text="",
 		winid=nil,
 	}
+
+	local menu_popup = utils_popup_menu.init()
 
 	setup_menus(commands, menu_win)
 	setup_help(help_text, menu_win)

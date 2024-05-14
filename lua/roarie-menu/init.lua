@@ -369,8 +369,7 @@ end
 
 -- {{{ M.OpenMenu = function()
 M.OpenMenu = function()
-	local menu_popup = utils_popup_menu.init()
-	utils_menu.init(commands, config.help_text, menu_popup)
+	utils_menu.open(commands, config.help_text)
 end
 -- }}}
 -- {{{ M.OpenSubMenu = function(id)

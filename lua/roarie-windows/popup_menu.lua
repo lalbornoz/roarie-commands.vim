@@ -299,111 +299,45 @@ end
 
 -- {{{ M.select_item_after = function(after, step, menu_popup, menus)
 M.select_item_after = function(after, step, menu_popup, menus)
-	local idx_new = menu_popup.idx
-
-	if step < 0 then
-		while idx_new < menu_popup.idx_max do
-			if menus.items[menus.idx].items[idx_new].display == after then
-				idx_new = idx_new + 1
-				break
-			else
-				idx_new = idx_new + 1
-			end
-		end
-		if idx_new == menu_popup.idx_max then
-			idx_new = 1
-		end
-	elseif step > 0 then
-		while idx_new > 1 do
-			if menus.items[menus.idx].items[idx_new].display == after then
-				idx_new = idx_new - 1
-				break
-			else
-				idx_new = idx_new - 1
-			end
-		end
-		if idx_new == 1 then
-			idx_new = menu_popup.idx_max
-		end
-	end
-
-	if menus.items[menus.idx].items[idx_new].display == "--" then
-		menu_popup.idx = idx_new
-		M.select_item_after(after, step, menu_popup, menus)
-		return
-	end
-
-	select_item(idx_new, menu_popup, menus)
+	return utils_windows.select_item_after(
+		after, step,
+		menu_popup.idx, menu_popup.idx_max,
+		menus.items[menus.idx].items,
+		select_item, menu_popup, menus)
 end
 -- }}}
 -- {{{ M.select_item_idx = function(idx_new, menu_popup, menus)
 M.select_item_idx = function(idx_new, menu_popup, menus)
-	if idx_new == -1 then
-		idx_new = menu_popup.idx_max
-	end
-	select_item(idx_new, menu_popup, menus)
+	return utils_windows.select_item_idx(
+		idx_new,
+		menu_popup.idx, menu_popup.idx_max,
+		menus.items[menus.idx].items,
+		select_item, menu_popup, menus)
 end
 -- }}}
--- {{{ M.select_item_key = function(ch, menu_popup, menus)
+-- {{{ M.select_item_key = function(menu_popup, menus)
 M.select_item_key = function(ch, menu_popup, menus)
-	local idx_new, key = menu_popup.idx, menu_popup.keys[ch]
-	if key ~= nil then
-		if type(key) == "table" then
-			idx_new = utils.array_next(key, menu_popup.idx)
-		else
-			idx_new = menu_popup.keys[ch]
-		end
-	end
-	select_item(idx_new, menu_popup, menus)
-
+	return utils_windows.select_item_key(
+		ch,
+		menu_popup.idx, menu_popup.idx_max,
+		menu_popup.keys, menus.items[menus.idx].items,
+		select_item, menu_popup, menus)
 end
 -- }}}
 -- {{{ M.select_item_next = function(menu_popup, menus)
 M.select_item_next = function(menu_popup, menus)
-	local idx_new = menu_popup.idx
-
-	if menu_popup.idx == menu_popup.idx_max then
-		idx_new = 1
-	else
-		while idx_new < menu_popup.idx_max do
-			idx_new = idx_new + 1
-			if menus.items[menus.idx].items[idx_new].title ~= "--" then
-				break
-			end
-		end
-	end
-
-	if menus.items[menus.idx].items[idx_new].title == "--" then
-		menu_popup.idx = idx_new
-		M.select_item_next(menu_popup, menus)
-		return
-	end
-
-	select_item(idx_new, menu_popup, menus)
+	return utils_windows.select_item_next(
+		menu_popup.idx, menu_popup.idx_max,
+		menus.items[menus.idx].items,
+		select_item, menu_popup, menus)
 end
 -- }}}
 -- {{{ M.select_item_prev = function(menu_popup, menus)
 M.select_item_prev = function(menu_popup, menus)
-	local idx_new = menu_popup.idx
-
-	if menu_popup.idx == 1 then
-		idx_new = menu_popup.idx_max
-	else
-		while idx_new > 1 do
-			idx_new = idx_new - 1
-			if menus.items[menus.idx].items[idx_new].title ~= "--" then
-				break
-			end
-		end
-	end
-
-	if menus.items[menus.idx].items[idx_new].title == "--" then
-		menu_popup.idx = idx_new
-		M.select_item_prev(menu_popup, menus)
-		return
-	end
-
-	select_item(idx_new, menu_popup, menus)
+	return utils_windows.select_item_prev(
+		menu_popup.idx, menu_popup.idx_max,
+		menus.items[menus.idx].items,
+		select_item, menu_popup, menus)
 end
 -- }}}
 
