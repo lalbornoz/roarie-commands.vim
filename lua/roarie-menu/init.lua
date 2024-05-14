@@ -284,8 +284,8 @@ M.AddSubMenu = function(id, title, ignore_in_palette)
 	}
 end
 -- }}}
--- {{{ M.AddSubMenuItem = function(id, icon, title, rhs, fn_display, fn_rhs)
-M.AddSubMenuItem = function(id, icon, title, rhs, fn_display, fn_rhs)
+-- {{{ M.AddSubMenuItem = function(id_submenu, id, icon, title, rhs, fn_display, fn_rhs)
+M.AddSubMenuItem = function(id_submenu, id, icon, title, rhs, fn_display, fn_rhs)
 	local display = title:gsub("&", "")
 	local key_pos = vim.fn.match(title, "&")
 	local key_char = nil
@@ -295,8 +295,8 @@ M.AddSubMenuItem = function(id, icon, title, rhs, fn_display, fn_rhs)
 		key_char = string.lower(string.sub(display, key_pos + 1, key_pos + 1))
 	end
 
-	submenus[id].idx_max = submenus[id].idx_max + 1
-	submenus[id].w = math.max(submenus[id].w, utils.ulen(icon .. " " .. display) + 2 + 2)
+	submenus[id_submenu].idx_max = submenus[id_submenu].idx_max + 1
+	submenus[id_submenu].w = math.max(submenus[id_submenu].w, utils.ulen(icon .. " " .. display) + 2 + 2)
 
 	if (fn_display ~= nil) and (fn_display ~= "") then
 		fn_display = loadstring(fn_display)
@@ -309,16 +309,22 @@ M.AddSubMenuItem = function(id, icon, title, rhs, fn_display, fn_rhs)
 		fn_rhs = nil
 	end
 
-	table.insert(submenus[id].items, {
+	local submenu_item = {
 		display=title,
 		fn_display=fn_display,
 		fn_rhs=fn_rhs,
 		icon=icon,
+		id=id,
 		key_char=key_char, key_pos=key_pos,
 		term=term,
 		rhs=rhs,
 		w=utils.ulen(display),
-	})
+	}
+	table.insert(submenus[id_submenu].items, submenu_item)
+	if commands_by_id[id] == nil then
+		commands_by_id[id] = {}
+	end
+	table.insert(commands_by_id[id], submenu_item)
 end
 -- }}}
 -- {{{ M.Reset = function()
@@ -376,7 +382,7 @@ end
 M.OpenSubMenu = function(id)
 	if #submenus[id].items > 0 then
 		if submenus[id].items[#submenus[id].items].display ~= "--" then
-			M.AddSubMenuItem(id, " ", "--", "")
+			M.AddSubMenuItem(id, "", " ", "--", "")
 		end
 	end
 	utils_submenu.open(-1, -1, submenus[id])

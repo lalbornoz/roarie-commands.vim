@@ -69,11 +69,11 @@ fun! roarie_commands#AddSubMenu(id, title, ...)
 		\ [a:id, a:title, get(a:, 3, 0)])
 endfun
 " }}}
-" {{{ fun! roarie_commands#AddSubMenuItem(id, icon, title, rhs, ...)
-fun! roarie_commands#AddSubMenuItem(id, icon, title, rhs, ...)
+" {{{ fun! roarie_commands#AddSubMenuItem(id_submenu, id, icon, title, rhs, ...)
+fun! roarie_commands#AddSubMenuItem(id_submenu, id, icon, title, rhs, ...)
 	call luaeval(
-		\ 'require("roarie-menu").AddSubMenuItem(_A[1], _A[2], _A[3], _A[4], _A[5], _A[6])',
-		\ [a:id, a:icon, a:title, a:rhs, get(a:, 1, ""), get(a:, 2, "")])
+		\ 'require("roarie-menu").AddSubMenuItem(_A[1], _A[2], _A[3], _A[4], _A[5], _A[6], _A[7])',
+		\ [a:id_submenu, a:id, a:icon, a:title, a:rhs, get(a:, 1, ""), get(a:, 2, "")])
 endfun
 " }}}
 
@@ -336,8 +336,8 @@ endfun
 fun! roarie_commands#AddSubMenu(id, title, ...)
 endfun
 " }}}
-" {{{ fun! roarie_commands#AddSubMenuItem(id, icon, title, rhs, ...)
-fun! roarie_commands#AddSubMenuItem(id, icon, title, rhs, ...)
+" {{{ fun! roarie_commands#AddSubMenuItem(id_submenu, id, icon, title, rhs, ...)
+fun! roarie_commands#AddSubMenuItem(id_submenu, id, icon, title, rhs, ...)
 endfun
 " }}}
 

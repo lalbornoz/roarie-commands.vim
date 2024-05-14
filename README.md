@@ -118,17 +118,17 @@ call roarie_commands#AddMapping("&Project", "build", "&Build...", "Build project
 "
 call roarie_commands#AddMapping("&Project", "git_submenu", "&Git submenu...", "Git submenu...", "<silent>", '<M-F6>', ':<C-U>call roarie_commands#OpenSubMenu("git_submenu")<CR>', "<fnalias>", "")
 call roarie_commands#AddSubMenu("git_submenu", "Git submenu")
-call roarie_commands#AddSubMenuItem("git_submenu", " ", "Git stat&us", ":Git")
-call roarie_commands#AddSubMenuItem("git_submenu", " ", "&Browse in web front-end", ":GBrowse")
-call roarie_commands#AddSubMenuItem("git_submenu", " ", "&Record changes to the repository", ":Git commit")
+call roarie_commands#AddSubMenuItem("git_submenu", "git_status", " ", "Git stat&us", ":Git")
+call roarie_commands#AddSubMenuItem("git_submenu", "git_browse", " ", "&Browse in web front-end", ":GBrowse")
+call roarie_commands#AddSubMenuItem("git_submenu", "git_commit", " ", "&Record changes to the repository", ":Git commit")
 
 "
 " Adds a submenu with a dynamic submenu item: the item title and rhs
 " are supplied by a Lua function.
 "
 call roarie_commands#AddSubMenu("build_submenu", "Build submenu")
-call roarie_commands#AddSubMenuItem("build_submenu", " ", "Set &default build arguments...", ":BuildMeEditArgs ")
-call roarie_commands#AddSubMenuItem("build_submenu", " ", "Current:                      ", ":BuildMeEditArgs ", 'return "Current: " .. (require("buildme").getargsbuild() or "")', 'return ":BuildMeEditArgs " .. (require("buildme").getargsbuild() or "")')
+call roarie_commands#AddSubMenuItem("build_submenu", "build_set_args", " ", "Set &default build arguments...", ":BuildMeEditArgs ")
+call roarie_commands#AddSubMenuItem("build_submenu", "", " ", "Current:                      ", ":BuildMeEditArgs ", 'return "Current: " .. (require("buildme").getargsbuild() or "")', 'return ":BuildMeEditArgs " .. (require("buildme").getargsbuild() or "")')
 
 "
 " If desired, menus encompassing all mappings that are mapped by
