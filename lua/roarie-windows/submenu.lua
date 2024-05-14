@@ -199,6 +199,7 @@ local function setup_prompt_window(submenu_win, w, h)
 	}
 
 	submenu_win.prompt_bid = utils_buffer.create_scratch("prompt", {})
+	vim.fn.setbufvar(submenu_win.prompt_bid, "&modifiable",	1)
 	submenu_win.prompt_winid = vim.api.nvim_open_win(submenu_win.prompt_bid, 0, opts_prompt)
 
 	vim.api.nvim_set_current_win(submenu_win.prompt_winid)

@@ -79,9 +79,12 @@ M.open = function(help_screen, parent, is_current)
 		help_screen = utils_buffer.frame(
 			help_screen, vim.o.columns,
 			-1, config.border_chars)
+		vim.fn.setbufvar(help_window.bid, "&modifiable", 1)
 		vim.api.nvim_buf_set_lines(
 			help_window.bid, 0, -1,
 			true, help_screen)
+		vim.fn.setbufvar(help_window.bid, "&modifiable", 0)
+		vim.fn.setbufvar(help_window.bid, "&modified", 0)
 		help_window.open = true
 	end
 end
