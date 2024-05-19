@@ -276,7 +276,9 @@ M.close = function(submenu_win, redraw)
 	end
 
 	if submenu_win.win_prev ~= nil then
-		vim.api.nvim_set_current_win(submenu_win.win_prev)
+		if vim.api.nvim_win_is_valid(submenu_win.win_prev) then
+			vim.api.nvim_set_current_win(submenu_win.win_prev)
+		end
 		submenu_win.win_prev = nil
 	end
 
