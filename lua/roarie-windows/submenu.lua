@@ -323,6 +323,15 @@ M.open = function(col, row, submenu)
 
 	setup_window(col, row, submenu, submenu_win, textlist, w, h)
 	setup_prompt_window(submenu_win, w, h)
+
+	vim.api.nvim_create_autocmd({"WinEnter"}, {
+		buffer=submenu_win.bid,
+		callback=function(ev)
+			vim.api.nvim_set_current_win(submenu_win.prompt_winid)
+			vim.api.nvim_set_current_buf(submenu_win.prompt_bid)
+		end,
+	})
+
 	M.select_item_idx(1, submenu, submenu_win)
 	setup_maps(M, submenu, submenu_win)
 
