@@ -262,8 +262,8 @@ local function setup_menus(commands, menu_win)
 	menu_win.size = #menu_win.items
 end
 -- }}}
--- {{{ local function setup_window(menu_win)
-local function setup_window(menu_win)
+-- {{{ local function setup_window(menu_popup, menu_win)
+local function setup_window(menu_popup, menu_win)
 	local opts = {
 		col=0, row=0,
 		focusable=1,
@@ -282,18 +282,19 @@ local function setup_window(menu_win)
 		menu_win.winid, "winhl",
 		"Normal:QuickBG,CursorColumn:QuickBG,CursorLine:QuickBG")
 
-	vim.api.nvim_create_autocmd({"WinEnter"}, {
-		buffer=menu_win.bid,
+	menu_win.autocmd_id = vim.api.nvim_create_autocmd({"WinEnter"}, {
 		callback=function(ev)
-			M.update(menu_win)
-		end,
-	})
-
-	vim.api.nvim_create_autocmd({"WinLeave"}, {
-		buffer=menu_win.bid,
-		callback=function(ev)
-			vim.cmd [[hi Cursor blend=0]]
-			vim.cmd [[set guicursor-=a:Cursor/lCursor]]
+			local winid_new = vim.api.nvim_get_current_win()
+			local bid_new = vim.api.nvim_get_current_buf()
+			if bid_new == menu_win.bid then
+				M.update(menu_win)
+			elseif bid_new ~= menu_popup.bid then
+				vim.cmd [[hi Cursor blend=0]]
+				vim.cmd [[set guicursor-=a:Cursor/lCursor]]
+				utils_popup_menu.close(menu_popup, true)
+				M.close(menu_win)
+				vim.cmd [[redraw]]
+			end
 		end,
 	})
 end
@@ -305,24 +306,33 @@ M.close = function(menu_win)
 	utils_help_screen.close()
 
 	if menu_win.winid ~= nil then
-		vim.api.nvim_win_close(menu_win.winid, 0)
+		local winid = menu_win.winid
 		menu_win.winid = nil
+		vim.api.nvim_win_close(winid, 0)
 	end
 
 	if menu_win.bid ~= nil then
-		utils_buffer.free(menu_win.bid, "menu_win")
+		local bid = menu_win.bid
 		menu_win.bid = nil
+		utils_buffer.free(bid, "menu_win")
 	end
 
 	if vim.o.guicursor ~= menu_win.guicursor_old then
 		vim.o.guicursor = menu_win.guicursor_old
 		vim.api.nvim_set_hl(0, "Cursor", menu_win.hl_cursor_old)
 	end
+
+	if menu_win.autocmd_id ~= nil then
+		local autocmd_id = menu_win.autocmd_id
+		menu_win.autocmd_id = nil
+		vim.api.nvim_del_autocmd(autocmd_id)
+	end
 end
 -- }}}
 -- {{{ M.open = function(commands, help_text)
 M.open = function(commands, help_text)
 	local menu_win = {
+		autocmd_id=nil,
 		bid=nil,
 		guicursor_old=vim.o.guicursor,
 		hl_cursor_old=vim.api.nvim_get_hl(0, {name="Cursor"}),
@@ -338,7 +348,7 @@ M.open = function(commands, help_text)
 
 	setup_menus(commands, menu_win)
 	setup_help(help_text, menu_win)
-	setup_window(menu_win)
+	setup_window(menu_popup, menu_win)
 	setup_maps(M, menu_popup, menu_win)
 	M.update(menu_win)
 
