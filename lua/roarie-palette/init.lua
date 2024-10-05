@@ -110,7 +110,9 @@ palette.palette = function(opts)
 				local selection = action_state.get_selected_entry()
 				actions.close(prompt_bufnr)
 				if selection.lhs ~= nil then
-					vim.fn.feedkeys(vim.api.nvim_replace_termcodes(selection.lhs, true, true, true))
+					vim.api.nvim_feedkeys(
+						vim.api.nvim_replace_termcodes(selection.lhs, true, true, true),
+						"m", false)
 				else
 					vim.cmd(selection.rhs)
 				end

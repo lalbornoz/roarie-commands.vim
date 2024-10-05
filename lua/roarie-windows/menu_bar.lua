@@ -39,7 +39,7 @@ local function activate_item(key)
 			utils_popup_menu.close(menu_popup, true)
 			M.close(menu_win)
 			vim.cmd [[redraw]]
-			vim.fn.feedkeys(vim.api.nvim_replace_termcodes(lhs, true, true, true))
+			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(lhs, true, true, true), "m", false)
 		end
 	end
 end

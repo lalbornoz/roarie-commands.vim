@@ -14,7 +14,7 @@ local function activate_item(M, submenu, submenu_win)
 	return function()
 		local str = vim.api.nvim_buf_get_lines(submenu_win.prompt_bid, 0, 1, false)[1]
 		M.close(submenu_win, true)
-		vim.fn.feedkeys(str .. "\n")
+		vim.api.nvim_feedkeys(str .. "\n", "t", true)
 	end
 end
 -- }}}
@@ -28,7 +28,7 @@ end
 -- {{{ local function complete(M, submenu, submenu_win)
 local function complete(M, submenu, submenu_win)
 	return function()
-		vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<C-X><C-V>", true, true, true))
+		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-X><C-V>", true, true, true), "m", false)
 	end
 end
 -- }}}
@@ -163,9 +163,9 @@ local function select_item(idx_new, submenu, submenu_win)
 		submenu_win.prompt_bid, 0, 1, false,
 		{submenu.items[submenu.idx].rhs})
 
-	vim.fn.feedkeys(
+	vim.api.nvim_feedkeys(
 		vim.api.nvim_replace_termcodes(
-		"<End>", true, true, true))
+		"<End>", true, true, true), "m", false)
 end
 -- }}}
 
@@ -204,7 +204,7 @@ local function setup_prompt_window(submenu_win, w, h)
 
 	vim.api.nvim_set_current_win(submenu_win.prompt_winid)
 	vim.api.nvim_set_current_buf(submenu_win.prompt_bid)
-	vim.fn.feedkeys(vim.api.nvim_replace_termcodes("i<End>", true, true, true))
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("i<End>", true, true, true), "m", false)
 
 	vim.api.nvim_win_set_option(
 		submenu_win.prompt_winid, "winhl",
