@@ -102,9 +102,9 @@ local function get_dimensions(menus, w, h)
 		if item.display ~= "--" then
 			if string.match(item.display, "\t") ~= nil then
 				local lhs, rhs = unpack(utils.split(item.display, "[^\t]+"), 1, 2)
-				w = math.max(w, utils.ulen("│ 󰘳 " .. lhs .. "   " .. rhs .. " │"))
+				w = math.max(w, utils.ulen("│ 󰘳  " .. lhs .. "   " .. rhs .. " │"))
 			else
-				w = math.max(w, utils.ulen("│ 󰘳 " .. item.display .. " │"))
+				w = math.max(w, utils.ulen("│ 󰘳  " .. item.display .. " │"))
 			end
 		end
 		h = h + 1
@@ -121,22 +121,22 @@ local function map_items(keys, cmdlist, menus, textlist, w)
 		if item.display ~= "--" then
 			if string.match(item.display, "\t") ~= nil then
 				local display = item.display
-				display, key_char = utils_windows.highlight_accel(cmdlist, display, y, 2)
+				display, key_char = utils_windows.highlight_accel(cmdlist, display, y, 3)
 				add_key(keys, key_char, item_idx)
 
 				local lhs, rhs = unpack(utils.split(display, "[^\t]+"), 1, 2)
-				local spacing = math.max(w - utils.ulen("│ 󰘳 " .. lhs .. rhs .. " │"), 3)
+				local spacing = math.max(w - utils.ulen("│ 󰘳  " .. lhs .. rhs .. " │"), 3)
 				display = lhs:gsub("&", "") .. string.rep(" ", spacing) .. rhs
 
 				menus.items[menus.idx].items[item_idx].menu_text = display
-				table.insert(textlist, " " .. item.icon .. " " .. display .. " ")
+				table.insert(textlist, " " .. item.icon .. "  " .. display .. " ")
 			else
 				local display = item.display
-				display, key_char = utils_windows.highlight_accel(cmdlist, display, y, 2)
+				display, key_char = utils_windows.highlight_accel(cmdlist, display, y, 3)
 				add_key(keys, key_char, item_idx)
 
 				menus.items[menus.idx].items[item_idx].menu_text = display
-				table.insert(textlist, " " .. item.icon .. " " .. display .. " ")
+				table.insert(textlist, " " .. item.icon .. "  " .. display .. " ")
 			end
 		else
 			table.insert(textlist, "--")
@@ -160,15 +160,15 @@ local function select_item(idx_new, menu_popup, menus)
 		table.insert(cmdlist,
 			utils_windows.highlight_region(
 				"QuickSel", menu_popup.idx + 1, 2,
-				menu_popup.idx + 1, map_x0 + 4, true))
+				menu_popup.idx + 1, map_x0 + 5, true))
 		table.insert(cmdlist,
 			utils_windows.highlight_region(
-				"QuickSelMap", menu_popup.idx + 1, map_x0 + 4,
-				menu_popup.idx + 1, map_x1 + 5, true))
-		table.insert(cmdlist,
-			utils_windows.highlight_region(
-				"QuickSel", menu_popup.idx + 1, map_x1 + 5,
+				"QuickSelMap", menu_popup.idx + 1, map_x0 + 5,
 				menu_popup.idx + 1, map_x1 + 6, true))
+		table.insert(cmdlist,
+			utils_windows.highlight_region(
+				"QuickSel", menu_popup.idx + 1, map_x1 + 6,
+				menu_popup.idx + 1, map_x1 + 7, true))
 	else
 		table.insert(cmdlist,
 			utils_windows.highlight_region(
