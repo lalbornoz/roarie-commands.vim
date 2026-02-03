@@ -178,10 +178,6 @@ endfun
 fun! s:FixMapping(lhs)
 	let lhs = a:lhs
 	if !has('nvim')
-		let lhs = substitute(lhs, '^<M-S-\(F[0-9]\+\|Tab\|Down\|Left\|Right\|Up\)>$', '<M-S-\1>', 'g')
-		let lhs = substitute(lhs, '^<M-S-\(F[0-9]\+\|Tab\|Down\|Left\|Right\|Up\)>$', '<M-S-\1>', 'g')
-		let lhs = substitute(lhs, '^<M-S-\(F[0-9]\+\|Tab\|Down\|Left\|Right\|Up\)>$', '<M-\1>', 'g')
-		let lhs = substitute(lhs, '^<M-S-\([a-z0-9]\)>$', '<M-S-\1>', 'g')
 		let lhs = substitute(lhs, '^<M-\([a-z0-9]\)>$', '<Esc>\1', 'g')
 	endif
 	return lhs
