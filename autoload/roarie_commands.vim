@@ -1,5 +1,5 @@
 	"
-" Copyright (c) 2024 Lucía Andrea Illanes Albornoz <lucia@luciaillanes.de>
+" Copyright (c) 2024, 2026 Lucía Andrea Illanes Albornoz <lucia@luciaillanes.de>
 "
 
 if has('nvim')
