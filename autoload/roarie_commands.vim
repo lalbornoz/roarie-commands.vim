@@ -127,8 +127,8 @@ let g:roarie_mod_order = [
 
 let s:fn_tmp_menu = "<Fn>"
 
-" {{{ fun! s:AddMapping_(noaddfl, menu, id, title, mode, descr, silent, lhs, rhs, pseudofl)
-fun! s:AddMapping_(noaddfl, menu, id, title, mode, descr, silent, lhs, rhs, pseudofl)
+" {{{ fun! s:AddMapping_(noaddfl, menu, id, title, mode, descr, silent, lhs, rhs, pseudofl, icon)
+fun! s:AddMapping_(noaddfl, menu, id, title, mode, descr, silent, lhs, rhs, pseudofl, icon)
 	let l:map_line = [s:GetMappingMode(a:mode, a:lhs)]
 	let lhs_map = s:FixMapping(a:lhs)
 
@@ -136,6 +136,7 @@ fun! s:AddMapping_(noaddfl, menu, id, title, mode, descr, silent, lhs, rhs, pseu
 		let l:descr = (len(a:descr) == 0) ? a:title : a:descr
 		let l:menu_item = {
 			\ 'descr': l:descr,
+			\ 'icon': a:icon,
 			\ 'id': a:id,
 			\ 'lhs': a:lhs,
 			\ 'menu': a:menu,
@@ -161,7 +162,7 @@ fun! s:AddMapping_(noaddfl, menu, id, title, mode, descr, silent, lhs, rhs, pseu
 		call s:AddMapping_(
 			\ a:noaddfl, s:fn_tmp_menu, a:id, a:title,
 			\ a:mode, a:descr, a:silent, a:lhs, a:rhs,
-			\ "<pseudo>")
+			\ "<pseudo>", a:icon)
 	endif
 
 	if !(a:pseudofl is "<pseudo>")
@@ -273,33 +274,33 @@ endfun
 
 " {{{ fun! roarie_commands#AddMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 fun! roarie_commands#AddMapping(menu, id, title, descr, silent, lhs, rhs, ...)
-	return s:AddMapping_(0, a:menu, a:id, a:title, 'nvo', a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, ""))
+	return s:AddMapping_(0, a:menu, a:id, a:title, 'nvo', a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, ""), get(a:, 2, " "))
 endfun
 " }}}
 " {{{ fun! roarie_commands#AddIMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 fun! roarie_commands#AddIMapping(menu, id, title, descr, silent, lhs, rhs, ...)
-	return s:AddMapping_(0, a:menu, a:id, a:title, 'insert', a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, ""))
+	return s:AddMapping_(0, a:menu, a:id, a:title, 'insert', a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, ""), get(a:, 2, " "))
 endfun
 " }}}
 " {{{ fun! roarie_commands#AddINVOMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 fun! roarie_commands#AddINVOMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 	call s:AddMapping_(0, a:menu, a:id, a:title, 'nvo', a:descr, a:silent, a:lhs, a:rhs)
-	return s:AddMapping_(1, a:menu, a:id, a:title, 'insert', a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, ""))
+	return s:AddMapping_(1, a:menu, a:id, a:title, 'insert', a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, ""), get(a:, 2, " "))
 endfun
 " }}}
 " {{{ fun! roarie_commands#AddNMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 fun! roarie_commands#AddNMapping(menu, id, title, descr, silent, lhs, rhs, ...)
-	return s:AddMapping_(0, a:menu, a:id, a:title, 'normal', a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, ""))
+	return s:AddMapping_(0, a:menu, a:id, a:title, 'normal', a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, ""), get(a:, 2, " "))
 endfun
 " }}}
 " {{{ fun! roarie_commands#AddTMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 fun! roarie_commands#AddTMapping(menu, id, title, descr, silent, lhs, rhs, ...)
-	return s:AddMapping_(0, a:menu, a:id, a:title, 'terminal', a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, ""))
+	return s:AddMapping_(0, a:menu, a:id, a:title, 'terminal', a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, ""), get(a:, 2, " "))
 endfun
 " }}}
 " {{{ fun! roarie_commands#AddVMapping(menu, id, title, descr, silent, lhs, rhs, ...)
 fun! roarie_commands#AddVMapping(menu, id, title, descr, silent, lhs, rhs, ...)
-	return s:AddMapping_(0, a:menu, a:id, a:title, 'visual', a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, ""))
+	return s:AddMapping_(0, a:menu, a:id, a:title, 'visual', a:descr, a:silent, a:lhs, a:rhs, get(a:, 1, ""), get(a:, 2, " "))
 endfun
 " }}}
 
@@ -362,6 +363,11 @@ fun! roarie_commands#Install()
 			let l:keys = substitute(l:keys, '<', '\\<', '')
 			let l:title = l:menu_item['title']
 			if l:title != "--"
+				if (l:menu_item['icon'] != " ")
+					let l:title = l:menu_item['icon'] ." ". l:title
+				else
+					let l:title = " " ." ". l:title
+				endif
 				let l:title .= "\t". l:menu_item['lhs']
 			endif
 			let l:menu_items += [[l:title, ':call feedkeys("'. l:keys .'")', '']]
