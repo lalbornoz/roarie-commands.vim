@@ -370,7 +370,7 @@ fun! roarie_commands#Install()
 				endif
 				let l:title .= "\t". l:menu_item['lhs']
 			endif
-			let l:menu_items += [[l:title, ':call feedkeys("'. l:keys .'")', '']]
+			let l:menu_items += [[l:title, ':call feedkeys("'. l:keys .'")', l:menu_item['rhs']]]
 		endfor
 		call quickui#menu#install(l:menu, l:menu_items, g:roarie_menus[l:menu]['priority'])
 	endfor
